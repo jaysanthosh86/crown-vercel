@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#B87333" />
+  <meta name="description" content="CROWN is a concept for a modular smart insulin pen attachment focused on guidance, dose-event logging, injection-site rotation and connected care." />
+  <title>CROWN — A calmer insulin routine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    try { const savedTheme = localStorage.getItem('crown-theme'); if (savedTheme === 'dark' || savedTheme === 'light') document.documentElement.dataset.theme = savedTheme; } catch (_) {}
+  </script>
+  <style>
+    :root{--paper:#f7f5f4;--paper2:#f2f0ee;--ink:#152831;--muted:#7c7168;--teal:#b85c11;--teal2:#e4a978;--blue:#2478db;--line:rgba(21,40,49,.12);--card:#fcfbfa;--night:#0c1e2a;--shadow:0 26px 80px rgba(17,40,49,.09);--radius:26px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button{font:inherit}::selection{background:#f2d2b8;color:#2d1d10}.page{overflow:hidden}.shell{width:min(1240px,calc(100% - 48px));margin:auto}.mono{font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;font-size:10px}.eyebrow{display:flex;align-items:center;gap:10px;color:#8d4c16;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.eyebrow:before{content:'';width:24px;height:1px;background:var(--teal)}h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:'Manrope',sans-serif;letter-spacing:-.045em}h1{font-size:clamp(48px,6.1vw,84px);line-height:.99;font-weight:600;margin:23px 0 24px;max-width:650px}h2{font-size:clamp(34px,4vw,54px);line-height:1.07;font-weight:600;margin:15px 0 18px}h3{font-size:21px;line-height:1.2;margin:0 0 10px;letter-spacing:-.03em}p{line-height:1.7;color:var(--muted)}.lede{font-size:18px;line-height:1.65;max-width:565px}.small{font-size:13px;line-height:1.65}.quiet{color:var(--muted)}.section{padding:116px 0;position:relative}.section-head{max-width:740px;margin-bottom:50px}.section-head p{font-size:17px;max-width:630px}.section-kicker{margin-bottom:16px}.btn{border:1px solid var(--ink);background:var(--ink);color:white;border-radius:999px;padding:14px 20px;display:inline-flex;gap:12px;align-items:center;font-weight:600;font-size:13px;transition:transform .25s,background .25s,box-shadow .25s;cursor:pointer}.btn:hover{transform:translateY(-3px);box-shadow:0 12px 26px #15283122}.btn.light{background:transparent;color:var(--ink);border-color:var(--line)}.btn .arrow{font-size:17px;line-height:0}.pill{font-size:11px;padding:8px 11px;border-radius:99px;background:#f8eade;color:#7f4617;display:inline-flex;gap:7px;align-items:center;font-family:'DM Mono',monospace;letter-spacing:.03em}.pill:before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}.topbar{height:76px;position:sticky;z-index:100;top:0;background:rgba(245,247,244,.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(21,40,49,.07)}.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{display:flex;align-items:center;gap:10px;font-family:'Manrope',sans-serif;font-weight:800;letter-spacing:-.05em;font-size:21px}.brand-icon{height:34px;width:34px;border-radius:12px;background:var(--ink);display:grid;place-items:center;color:#ebaa75}.brand-icon svg{width:22px}.nav-links{display:flex;gap:27px;align-items:center;font-size:12px;color:#6a5d52}.nav-links a{position:relative;transition:color .2s}.nav-links a:after{content:'';position:absolute;height:1px;background:var(--teal);width:0;bottom:-7px;left:0;transition:width .25s}.nav-links a:hover{color:var(--ink)}.nav-links a:hover:after{width:100%}.nav-end{display:flex;align-items:center;gap:12px}.nav-end .btn{padding:11px 16px;font-size:12px}.menu-toggle{display:none;background:none;border:1px solid var(--line);border-radius:50%;width:40px;height:40px;color:var(--ink)}
+    /* hero */
+    .hero{padding:74px 0 66px;position:relative}.hero:before{content:'';position:absolute;width:670px;height:670px;right:-230px;top:-260px;background:radial-gradient(circle,#f5e5d8 0,rgba(216,245,237,0) 68%);pointer-events:none}.hero-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:24px;align-items:center;position:relative}.hero-copy{padding:10px 0 20px;position:relative;z-index:2}.hero h1 span{color:#9d4a07}.hero .lede{max-width:500px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 30px}.proof-row{display:flex;gap:18px;align-items:center;color:var(--muted);font-size:12px}.mini-avatars{display:flex;padding-left:4px}.mini-avatars span{width:26px;height:26px;border-radius:50%;border:2px solid var(--paper);margin-left:-5px;display:grid;place-items:center;font-size:9px;background:#eddfd4;color:#683e1c}.proof-row strong{color:var(--ink);font-weight:700}.hero-note{margin-top:23px;font-size:11px;color:#908882;max-width:420px}.hero-stage{min-height:570px;position:relative;border-radius:34px;background:radial-gradient(ellipse at 50% 44%,#183c4a 0,#0f2736 42%,#091923 100%);box-shadow:0 32px 80px rgba(15,39,54,.18);overflow:hidden;isolation:isolate}.hero-stage:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(142,237,223,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(142,237,223,.065) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,transparent 1%,black 22%,black 85%,transparent 100%);transform:perspective(550px) rotateX(58deg) scale(1.45) translateY(15%);transform-origin:center bottom;z-index:-1}.stage-top{position:absolute;top:23px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;color:#bfafa2;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;z-index:3}.live-dot{display:inline-flex;align-items:center;gap:7px}.live-dot:before{content:'';height:6px;width:6px;border-radius:50%;background:#e3995c;box-shadow:0 0 12px #e3995c}.scene-mount{position:absolute;inset:30px 0 10px;width:100%;height:calc(100% - 40px);outline:none}.scene-mount canvas{display:block;width:100%;height:100%;touch-action:pan-y}.stage-footer{position:absolute;bottom:20px;left:24px;right:24px;z-index:3;display:flex;align-items:end;justify-content:space-between;pointer-events:none}.stage-product{color:#fff9f4}.stage-product .mono{color:#e8a975;font-size:9px}.stage-product strong{display:block;font-family:'Manrope',sans-serif;font-size:19px;margin-top:7px;letter-spacing:-.04em}.stage-product span{font-size:11px;color:#c1b4a9}.drag-hint{font-family:'DM Mono',monospace;font-size:9px;color:#beaea1;display:flex;align-items:center;gap:7px}.drag-hint svg{width:22px;height:22px;stroke:#e2985b}.scene-label{position:absolute;z-index:4;border:1px solid rgba(135,230,215,.28);background:rgba(13,36,48,.76);backdrop-filter:blur(14px);color:#f9e7d9;padding:11px 13px;border-radius:14px;text-align:left;cursor:pointer;transition:transform .25s,border-color .25s,background .25s;box-shadow:0 12px 24px #07161f2b;max-width:180px}.scene-label:hover,.scene-label.active{border-color:#de9356;background:rgba(16,68,78,.94);transform:translateY(-3px)}.scene-label b{display:block;font-size:11px;font-weight:600;margin-bottom:4px}.scene-label small{display:block;font-size:10px;color:#c0ad9d;line-height:1.35}.scene-label .num{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#bc6219;color:#3a1e07;font:10px 'DM Mono',monospace;margin-right:5px}.lab-sensor{top:22%;right:6%}.lab-dose{top:42%;left:5%}.lab-cartridge{bottom:27%;left:5%}.lab-connect{bottom:19%;right:7%}.stage-caption{position:absolute;left:25px;top:54px;color:#a38a76;font:9px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase}
+    .trust-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:21px 0}.trust-items{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}.trust-item{display:flex;align-items:center;gap:11px;color:#766b62;font-size:11px}.trust-item i{font-style:normal;font-size:18px;color:#a95816}.trust-item strong{color:var(--ink);font-size:12px;display:block;margin-bottom:2px}
+    /* common panels */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.surface{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:0 8px 24px rgba(17,40,49,.025)}.surface.dark{background:var(--night);border-color:rgba(255,255,255,.08);color:#fbf7f4}.surface.dark p{color:#beb1a6}.surface.dark h3{color:#fbf7f3}.index{color:#a95a1a;font:11px 'DM Mono',monospace;letter-spacing:.1em;margin-bottom:24px;display:block}.iconbox{height:42px;width:42px;border-radius:13px;background:#f8e9dd;color:#8f4a11;display:grid;place-items:center;margin-bottom:24px}.iconbox svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.soft-tag{border:1px solid var(--line);border-radius:99px;font-size:10px;padding:7px 10px;color:#7b7168}.callout{display:flex;gap:16px;background:#f7efe9;border-radius:18px;padding:19px 22px;margin-top:22px;color:#5b4634}.callout .signal{width:28px;height:28px;min-width:28px;border-radius:50%;display:grid;place-items:center;background:#f3e0d0;color:#8d4a13;font-weight:700}.callout p{margin:0;color:#735f4f;font-size:12px}.callout strong{color:#472f1b}
+    /* Problem */
+    .problem{background:#f2efed}.problem-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:start}.big-quote{font-family:'Manrope',sans-serif;font-size:clamp(27px,3vw,42px);line-height:1.22;letter-spacing:-.04em;font-weight:500}.big-quote span{color:#a9520b}.story-note{margin-top:30px;border-left:2px solid var(--teal);padding-left:18px;max-width:510px}.story-note p{font-size:13px}.pain-stack{display:grid;gap:12px}.pain-row{display:grid;grid-template-columns:52px 1fr;gap:16px;padding:22px 24px;border:1px solid #e5e0dc;background:rgba(255,255,255,.63);border-radius:18px;align-items:start}.pain-row .n{height:38px;width:38px;border-radius:12px;background:#f7e9dd;display:grid;place-items:center;color:#974f14;font:11px 'DM Mono',monospace}.pain-row h3{font-size:17px;margin-bottom:6px}.pain-row p{font-size:12px;margin-bottom:0}
+    /* How */
+    .how-grid{display:grid;grid-template-columns:.88fr 1.12fr;gap:35px;align-items:stretch}.how-list{display:grid;gap:7px}.step{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:17px 16px;border-radius:16px;border:1px solid transparent;transition:all .25s;cursor:pointer}.step:hover,.step.active{border-color:#e7cdb7;background:#fbf4ef}.step-no{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#f7dbc4;display:grid;place-items:center;font:11px 'DM Mono',monospace}.step h3{font-size:16px;margin:2px 0 6px}.step p{font-size:12px;margin:0}.flow-panel{padding:30px;background:#0c202b;border-radius:var(--radius);color:#fff3ea;position:relative;overflow:hidden;min-height:420px}.flow-panel:before{content:'';position:absolute;width:360px;height:360px;border:1px solid #563820;border-radius:50%;right:-70px;top:-60px;box-shadow:0 0 0 35px #102b36,0 0 0 36px #563820,0 0 0 90px #0d2632,0 0 0 91px #492f19}.flow-panel>*{position:relative;z-index:1}.flow-panel .eyebrow{color:#e4a876}.flow-panel h3{font-size:27px;max-width:320px;margin:20px 0}.flow-panel p{color:#c0b0a3;font-size:13px;max-width:345px}.flow-metrics{display:flex;gap:10px;margin-top:38px}.flow-metric{border:1px solid #264550;border-radius:14px;padding:14px;min-width:100px}.flow-metric strong{display:block;font:20px 'Manrope',sans-serif;color:#e5a673}.flow-metric span{font-size:10px;color:#b8a698}
+    /* connectivity */
+    .connect{background:#f0edea}.connect-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}.app-card{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px;min-height:270px;position:relative;overflow:hidden}.app-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}.app-card-head h3{font-size:18px;margin:0}.tiny-mark{font:9px 'DM Mono',monospace;letter-spacing:.09em;text-transform:uppercase;color:#948a81}.dash-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.dash-stat{padding:14px 12px;border-radius:14px;background:#f7f4f2}.dash-stat strong{font:25px 'Manrope',sans-serif;letter-spacing:-.06em;display:block}.dash-stat small{color:#887e75;font-size:10px}.sparkline{height:65px;margin-top:22px;border-bottom:1px solid #e7e3df;position:relative;overflow:hidden}.sparkline svg{width:100%;height:100%}.dose-entry{margin-top:17px;display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px}.dose-entry strong{font-size:11px;display:block}.dose-entry small{font-size:10px;color:#837a73}.status{font-size:10px;color:#8d4c16;background:#f8ece2;border-radius:99px;padding:6px 8px;white-space:nowrap}.clinician-card{background:#132e3a;color:#faf1ea;border-radius:26px;padding:26px;position:relative;overflow:hidden;min-height:270px}.clinician-card:after{content:'';width:260px;height:260px;border-radius:50%;position:absolute;right:-80px;bottom:-145px;border:1px solid #62452e;box-shadow:0 0 0 24px #183844,0 0 0 25px #62452e,0 0 0 65px #14313e;opacity:.9}.clinician-card>*{position:relative;z-index:1}.clinician-card .app-card-head h3{color:#fbf4ef}.patient-list{display:grid;gap:11px}.patient-line{display:grid;grid-template-columns:35px 1fr auto;gap:11px;align-items:center}.person-dot{width:33px;height:33px;border-radius:12px;background:#58381d;display:grid;place-items:center;color:#e9ae7d;font:11px 'DM Mono',monospace}.patient-line strong{display:block;font-size:11px}.patient-line small{color:#c0aea0;font-size:10px}.bar{height:5px;width:75px;border-radius:9px;background:#513824;overflow:hidden;margin-top:6px}.bar i{height:100%;display:block;background:#df9e69;border-radius:9px}.patient-line em{font-style:normal;color:#e7b287;font-size:10px}.sync-strip{display:flex;justify-content:center;align-items:center;gap:20px;color:#7b6e64;font-size:11px;margin:24px 0 0;flex-wrap:wrap}.sync-strip span{display:flex;align-items:center;gap:9px}.sync-strip i{font-style:normal;color:#9c5113;font-size:19px}
+    /* market */
+    .market-top{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:32px}.market-top .section-head{margin-bottom:0}.market-top .aside-note{max-width:280px;font-size:11px;border-left:1px solid var(--line);padding-left:18px}.competitors{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.competitor{background:#fff;border:1px solid var(--line);border-radius:20px;padding:21px;display:flex;flex-direction:column;min-height:260px;transition:transform .25s,box-shadow .25s}.competitor:hover{transform:translateY(-5px);box-shadow:var(--shadow)}.competitor .country{font:9px 'DM Mono',monospace;color:#99918a;letter-spacing:.1em;text-transform:uppercase}.competitor .symbol{height:44px;width:44px;background:#f7f2ed;border-radius:14px;margin:20px 0 16px;display:grid;place-items:center;color:#9f5111;font:15px 'DM Mono',monospace}.competitor h3{font-size:17px}.competitor p{font-size:11px;line-height:1.6;flex:1}.competitor .price-note{padding-top:14px;border-top:1px solid var(--line);font-size:10px;color:#837970}.diff-panel{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;background:#f3f0ed;border-radius:24px;padding:28px}.diff-panel h3{font-size:24px;max-width:380px}.diff-list{display:grid;grid-template-columns:1fr 1fr;gap:11px}.diff-list span{font-size:12px;color:#6b5d52;display:flex;gap:9px;align-items:flex-start}.diff-list i{font-style:normal;color:#a35414;font-weight:700}
+    /* India */
+    .india{background:#102632;color:#fbf4ef}.india .eyebrow{color:#dfa372}.india .section-head p{color:#c5bab1}.india .section-head{max-width:790px}.india-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px;align-items:start}.india-stat{border:1px solid #2b4954;background:#14313d;border-radius:24px;padding:27px}.india-stat .number{font:clamp(48px,5vw,70px) 'Manrope',sans-serif;letter-spacing:-.07em;color:#e4aa7b;line-height:1}.india-stat p{color:#c5b8ad;font-size:12px;margin:12px 0 0}.india-stat .source{font:9px 'DM Mono',monospace;color:#a08977;margin-top:20px}.india-points{display:grid;grid-template-columns:1fr 1fr;gap:12px}.india-point{border:1px solid #2b4954;border-radius:18px;padding:20px;background:#132d39}.india-point .n{font:10px 'DM Mono',monospace;color:#dfa271;margin-bottom:16px;display:block}.india-point h3{font-size:16px;color:#faf6f2}.india-point p{font-size:11px;color:#c3b7ad;margin-bottom:0}.india-bottom{margin-top:16px;border:1px solid #5a4636;border-radius:17px;padding:16px 19px;color:#c7baaf;font-size:11px;display:flex;gap:12px;align-items:flex-start}.india-bottom b{color:#e2a777;font-weight:500}
+    /* budget */
+    .build-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.cost-card{border:1px solid var(--line);background:#fff;border-radius:24px;padding:26px}.cost-title{display:flex;justify-content:space-between;gap:15px;align-items:start;margin-bottom:20px}.cost-title h3{font-size:20px}.estimate{font:10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.07em;color:#8e4a12;background:#f8ece2;border-radius:9px;padding:8px}.cost-table{width:100%;border-collapse:collapse;font-size:11px}.cost-table th{text-align:left;color:#968e87;font:9px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em;padding:10px 0;border-bottom:1px solid var(--line)}.cost-table td{padding:13px 0;border-bottom:1px solid #f0eeed;color:#695c51;vertical-align:top}.cost-table td:last-child{text-align:right;white-space:nowrap;color:var(--ink);font-weight:600}.cost-table tr:last-child td{border-bottom:0}.cost-total{border-top:1px solid var(--line);margin-top:13px;padding-top:15px;display:flex;justify-content:space-between;gap:10px;font-size:12px}.cost-total strong{font:20px 'Manrope',sans-serif;letter-spacing:-.04em}.cost-total span{color:#90877f;font-size:10px;max-width:180px;text-align:right}.build-stack{display:grid;gap:14px}.build-card{border:1px solid var(--line);background:#f3f0ed;border-radius:20px;padding:22px}.build-card h3{font-size:17px}.build-card p{font-size:11px;margin-bottom:0}.mini-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}.mini-checks span{font-size:10px;color:#6b5d52;padding:9px;border-radius:10px;background:#fbf9f8}.feasibility{margin-top:21px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.feas-box{padding:21px;border-radius:18px;border:1px solid var(--line)}.feas-box.good{background:#f7efe8}.feas-box.risk{background:#f7f1e7}.feas-box h3{font-size:16px}.feas-box li{font-size:11px;color:#6e6258;margin:8px 0;line-height:1.5}
+    /* roadmap + FAQ */
+    .roadmap{background:#f2efec}.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:42px}.timeline:before{content:'';height:1px;position:absolute;top:17px;left:7%;right:7%;background:#d7c6b9}.phase{position:relative;padding:0 18px}.phase .point{height:35px;width:35px;border-radius:50%;border:1px solid #cfb49e;background:#f7ede5;display:grid;place-items:center;color:#8e4a12;font:10px 'DM Mono',monospace;margin-bottom:23px;position:relative;z-index:1}.phase.active .point{background:var(--teal);border-color:var(--teal);color:#3b1e07;box-shadow:0 0 0 6px #f3e4d7}.phase small{font:9px 'DM Mono',monospace;color:#8c4b15;text-transform:uppercase;letter-spacing:.1em}.phase h3{font-size:17px;margin:9px 0}.phase p{font-size:11px}.phase ul{padding-left:16px;margin:10px 0;color:#7b6f66}.phase li{font-size:10px;margin:7px 0;line-height:1.5}.faq-grid{display:grid;grid-template-columns:.65fr 1.35fr;gap:60px}.faq-intro{position:sticky;top:110px;align-self:start}.faq-intro p{font-size:13px}.faq-list details{border-bottom:1px solid var(--line);padding:19px 0}.faq-list details:first-child{border-top:1px solid var(--line)}.faq-list summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;font-family:'Manrope',sans-serif;font-size:16px;font-weight:600;letter-spacing:-.02em}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary:after{content:'+';font:20px 'DM Sans',sans-serif;color:#984f14;transition:transform .2s}.faq-list details[open] summary:after{content:'−'}.faq-answer{padding:13px 30px 0 0;max-width:760px}.faq-answer p,.faq-answer li{font-size:12px}.faq-answer ul{padding-left:18px}.faq-answer li{margin:8px 0;line-height:1.65}
+    /* validation / footer */
+    .validation{display:grid;grid-template-columns:1fr 1fr;gap:20px}.validation-card{border-radius:23px;padding:26px;background:#fff;border:1px solid var(--line)}.validation-card h3{font-size:19px}.validation-card p{font-size:12px}.validation-card .number{font:34px 'Manrope',sans-serif;color:#9a5217;letter-spacing:-.06em}.validation-card .template{border:1px dashed #ccc0b6;background:#faf8f6;padding:14px;border-radius:12px;font-size:11px;color:#786b60;line-height:1.7}.source-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.source-list a{font-size:10px;border:1px solid var(--line);border-radius:99px;padding:8px 11px;color:#706358;transition:all .2s}.source-list a:hover{border-color:#b86623;color:#8b4811;background:#fbf4ee}.footer{background:#0b202b;color:#f7eee6;padding:58px 0 30px}.footer-main{display:grid;grid-template-columns:1fr auto;gap:45px;align-items:start;padding-bottom:43px;border-bottom:1px solid #263f48}.footer h2{font-size:clamp(30px,4.3vw,52px);max-width:600px;margin:19px 0}.footer p{font-size:12px;color:#b4a69a;max-width:480px}.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end;font-size:11px;color:#c2b4a8}.footer-bottom{display:flex;justify-content:space-between;gap:20px;align-items:center;padding-top:22px;color:#978577;font:9px 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}.footer-brand{color:#f7eee7}.disclaimer{max-width:880px;font-size:10px;color:#a29082;line-height:1.6;margin-top:20px}
+    /* motion */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}.reveal.in-view{opacity:1;transform:translateY(0)}.delay-1{transition-delay:.08s}.delay-2{transition-delay:.16s}.delay-3{transition-delay:.24s}.float{animation:float 6s ease-in-out infinite}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #e184384d}50%{box-shadow:0 0 0 8px #e1843800}}.hero-stage .live-dot:before{animation:pulse 2.7s ease-out infinite}
+    @media(max-width:1050px){.nav-links{gap:16px}.hero-grid{grid-template-columns:.85fr 1.15fr}.hero-stage{min-height:510px}.scene-label{padding:9px 10px;max-width:150px}.lab-sensor{right:3%}.lab-dose,.lab-cartridge{left:3%}.competitors{grid-template-columns:repeat(2,1fr)}.market-top{align-items:start}.section{padding:92px 0}}
+    @media(max-width:800px){.shell{width:min(100% - 34px,640px)}.topbar{height:66px}.nav-links{display:none;position:absolute;top:65px;left:0;right:0;background:rgba(245,247,244,.98);border-bottom:1px solid var(--line);padding:20px 26px 25px;flex-direction:column;align-items:flex-start;gap:20px}.nav-links.open{display:flex}.nav-end .btn{display:none}.menu-toggle{display:grid;place-items:center}.hero{padding:45px 0 45px}.hero-grid{grid-template-columns:1fr;gap:32px}.hero-copy{padding:0}.hero h1{max-width:620px;font-size:clamp(48px,12vw,72px)}.hero-stage{min-height:520px}.hero-note{margin-top:18px}.trust-items{justify-content:flex-start}.trust-item{width:calc(50% - 12px)}.section{padding:78px 0}.section-head{margin-bottom:34px}.problem-grid,.how-grid,.connect-layout,.india-grid,.build-grid,.faq-grid{grid-template-columns:1fr;gap:26px}.problem-grid{gap:35px}.faq-intro{position:static}.flow-panel{min-height:340px}.market-top{display:block}.market-top .aside-note{border-left:0;border-top:1px solid var(--line);padding:15px 0 0;max-width:100%;margin-top:18px}.diff-panel{grid-template-columns:1fr}.india-points{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:1fr 1fr;row-gap:24px}.timeline:before{display:none}.phase{padding:0 10px}.phase .point{margin-bottom:13px}.footer-main{grid-template-columns:1fr}.footer-links{justify-content:flex-start}.footer-bottom{align-items:flex-start;flex-direction:column}.validation{grid-template-columns:1fr}}
+    @media(max-width:500px){.shell{width:calc(100% - 28px)}.brand{font-size:19px}.hero-stage{min-height:470px;border-radius:24px}.stage-top{left:16px;right:16px;top:16px}.stage-footer{left:17px;right:17px;bottom:16px}.scene-label{max-width:126px;padding:8px 9px}.scene-label b{font-size:10px}.scene-label small{font-size:9px}.lab-sensor{top:18%;right:3%}.lab-dose{top:39%;left:3%}.lab-cartridge{bottom:27%;left:3%}.lab-connect{bottom:17%;right:3%}.stage-caption{left:17px;top:45px}.drag-hint{font-size:8px}.proof-row{align-items:flex-start}.trust-item{width:100%}.surface{padding:22px}.pain-row{padding:17px;grid-template-columns:40px 1fr;gap:11px}.how-grid{gap:20px}.flow-panel{padding:22px}.flow-metrics{gap:7px}.flow-metric{min-width:0;flex:1;padding:11px}.flow-metric strong{font-size:17px}.app-card,.clinician-card{padding:21px}.dash-stat{padding:11px 8px}.dash-stat strong{font-size:22px}.competitors{grid-template-columns:1fr}.competitor{min-height:auto}.diff-list{grid-template-columns:1fr}.india-points{grid-template-columns:1fr}.india-stat{padding:22px}.cost-card{padding:19px}.cost-table{font-size:10px}.mini-checks{grid-template-columns:1fr 1fr}.feasibility{grid-template-columns:1fr}.timeline{grid-template-columns:1fr}.phase{padding:0}.phase ul{margin-bottom:20px}.faq-list summary{font-size:14px}.footer{padding-top:45px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}.float,.hero-stage .live-dot:before{animation:none}*{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+    /* Typography pass: calmer hierarchy, larger reading sizes and more contrast. */
+    body{font-size:16px}
+    .mono{font-size:11px}
+    .eyebrow{font-size:12px;letter-spacing:.13em}
+    h1{font-size:clamp(52px,6.35vw,88px);line-height:1.01}
+    h2{font-size:clamp(38px,4.2vw,58px);line-height:1.06}
+    h3{font-size:23px;line-height:1.22}
+    p{font-size:15px;line-height:1.76}
+    .lede{font-size:20px;line-height:1.7}
+    .small{font-size:14px;line-height:1.72}
+    .section-head p{font-size:19px;line-height:1.75}
+    .nav-links{font-size:13px;gap:23px}
+    .btn{font-size:14px}
+    .pill{font-size:12px}
+    .trust-item{font-size:13px;line-height:1.5}
+    .trust-item strong{font-size:14px}
+    .surface p,.pain-row p,.callout p,.story-note p,.phase p,.faq-answer p,.faq-answer li,.validation-card p,.india-bottom,.hero-note{font-size:14px;line-height:1.72}
+    .pain-row h3{font-size:19px}
+    .faq-list summary{font-size:18px}
+    .faq-answer{padding-top:15px}
+    .cost-table{font-size:12px}
+    .hero-note{font-size:13px;color:#837971}
+    .section-kicker{margin-bottom:18px}
+    .theme-toggle{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--ink);cursor:pointer;transition:transform .22s ease,background .22s ease,border-color .22s ease;box-shadow:0 3px 12px rgba(17,40,49,.04)}
+    .theme-toggle:hover{transform:translateY(-2px) rotate(-8deg);border-color:var(--teal);background:var(--paper2)}
+    .theme-toggle:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+    .theme-toggle svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+    .theme-toggle .icon-sun{display:none}
+    :root[data-theme="dark"] .theme-toggle .icon-moon{display:none}
+    :root[data-theme="dark"] .theme-toggle .icon-sun{display:block}
+
+    /* Dark mode is a complete page palette; the product render stays dark and tactile. */
+    :root[data-theme="dark"]{--paper:#1c1510;--paper2:#281f17;--ink:#f6f1ed;--muted:#bcb0a7;--teal:#d37427;--teal2:#ebb78c;--blue:#68a9ff;--line:rgba(220,246,241,.15);--card:#271e17;--night:#09171e;--shadow:0 26px 80px rgba(0,0,0,.28)}
+    :root[data-theme="dark"] body{background:var(--paper);color:var(--ink)}
+    :root[data-theme="dark"] .topbar{background:rgba(16,25,28,.86);border-bottom-color:rgba(220,246,241,.1)}
+    :root[data-theme="dark"] .nav-links{color:#c5bab1}
+    :root[data-theme="dark"] .nav-links a:hover{color:#fff}
+    :root[data-theme="dark"] .brand-icon{background:#faefe6;color:#7d3d08}
+    :root[data-theme="dark"] .hero:before{background:radial-gradient(circle,#422a17 0,rgba(23,66,56,0) 68%)}
+    :root[data-theme="dark"] .hero h1 span{color:#e0853b}
+    :root[data-theme="dark"] .hero-note{color:#b2a69c}
+    :root[data-theme="dark"] .problem{background:#141f23}
+    :root[data-theme="dark"] .problem .pain-row{background:rgba(255,255,255,.035);border-color:var(--line)}
+    :root[data-theme="dark"] .problem .pain-row .n{background:#3d2b1d;color:#e4a16b}
+    :root[data-theme="dark"] .callout{background:#362517;color:#f0dfd1}
+    :root[data-theme="dark"] .callout p{color:#d2c0b1}
+    :root[data-theme="dark"] .callout strong{color:#fff3e9}
+    :root[data-theme="dark"] .callout .signal{background:#523924;color:#f0b483}
+    :root[data-theme="dark"] .iconbox{background:#3b2a1c;color:#e2a573}
+    :root[data-theme="dark"] .pill{background:#39291b;color:#eab78d}
+    :root[data-theme="dark"] .soft-tag{color:#c9beb5}
+    :root[data-theme="dark"] .mini-avatars span{border-color:var(--paper);background:#443121;color:#f9d4b6}
+    :root[data-theme="dark"] .phase .point{background:#30241a;border-color:#6f5642;color:#e5b792}
+    :root[data-theme="dark"] .phase.active .point{background:var(--teal);color:#2b1707;box-shadow:0 0 0 6px #3b2819}
+    :root[data-theme="dark"] .validation-card{background:var(--card);border-color:var(--line)}
+    :root[data-theme="dark"] .validation-card .template{background:#201710;border-color:#5b493b;color:#c5b9b0}
+    :root[data-theme="dark"] .source-list a{color:#cabdb3}
+    :root[data-theme="dark"] .source-list a:hover{background:#35261a;color:#f5c39b}
+    :root[data-theme="dark"] .nav-links.open{background:rgba(16,25,28,.98);border-bottom-color:var(--line)}
+    :root[data-theme="dark"] .btn.light{color:var(--ink)}
+    :root[data-theme="dark"] .theme-toggle{box-shadow:0 4px 16px rgba(0,0,0,.25)}
+    :root[data-theme="dark"] .theme-toggle:hover{background:#362a21}
+    :root[data-theme="dark"] ::selection{background:#6e401a;color:#fff8f3}
+    @media(max-width:800px){.nav-end{gap:9px}.theme-toggle{width:40px;height:40px;flex-basis:40px}.nav-end .btn{display:none}.section-head p{font-size:17px}.hero .lede{font-size:19px}}
+    @media(max-width:500px){h2{font-size:clamp(34px,9vw,43px)}h3{font-size:21px}p{font-size:15px}.lede{font-size:18px}.section-head p{font-size:16px}.faq-list summary{font-size:16px}.theme-toggle{width:38px;height:38px;flex-basis:38px}.topbar{height:66px}}
+
+    /* Readability + complete theme coverage: all panels participate in the selected palette. */
+    :root{color-scheme:light}
+    :root[data-theme="dark"]{color-scheme:dark}
+    h1,h2,h3{font-weight:750}
+    h1{font-weight:800;letter-spacing:-.052em}
+    h2{font-weight:800;letter-spacing:-.048em}
+    h3{font-size:clamp(20px,1.45vw,24px);font-weight:750;letter-spacing:-.025em}
+    body{font-size:17px}
+    p{font-size:16px;line-height:1.78;font-weight:450}
+    .eyebrow,.mono{font-weight:600}
+    .nav-links{font-weight:600}
+    .section-head p{font-size:19px;line-height:1.75}
+    .competitor .country{font-size:11px;color:#7d7065;font-weight:600;line-height:1.5}
+    .competitor .symbol{font-size:16px;font-weight:600}
+    .competitor h3{font-size:20px;font-weight:800;line-height:1.25}
+    .competitor p{font-size:14px;line-height:1.72}
+    .competitor .price-note{font-size:13px;line-height:1.65;color:#6d5e52}
+    .market-top .aside-note{font-size:13px;line-height:1.65}
+    .diff-list span{font-size:14px;line-height:1.6}
+    .pain-row h3,.step h3,.india-point h3,.build-card h3,.feas-box h3{font-weight:750}
+    .pain-row p,.step p,.phase p,.phase li,.india-stat p,.india-point p,.india-bottom,.feas-box li,.faq-answer p,.faq-answer li{font-size:14px;line-height:1.72}
+    .step p{font-size:14px}
+    .step-no{font-size:12px;font-weight:600}
+    .app-card-head h3{font-size:20px;font-weight:800}
+    .tiny-mark{font-size:10px;font-weight:600}
+    .dash-stat strong{font-size:27px;font-weight:800}
+    .dash-stat small,.dose-entry small,.patient-line small{font-size:12px;line-height:1.5}
+    .dose-entry strong,.patient-line strong{font-size:14px;font-weight:700}
+    .status,.patient-line em{font-size:12px;font-weight:600}
+    .sync-strip{font-size:13px}
+    .cost-title h3{font-size:22px;font-weight:800}
+    .estimate{font-size:11px;font-weight:700}
+    .cost-table{font-size:13px}
+    .cost-table th{font-size:11px;font-weight:700}
+    .cost-table td{font-size:13px;line-height:1.6}
+    .cost-total{font-size:14px}
+    .cost-total span{font-size:12px}
+    .build-card p,.mini-checks span,.validation-card p,.validation-card .template{font-size:14px;line-height:1.72}
+    .mini-checks span{font-weight:550}
+    .phase small{font-size:11px;font-weight:700}
+    .phase li{font-size:13px}
+    .faq-answer p,.faq-answer li{font-size:15px;line-height:1.78}
+    .source-list a{font-size:12px;font-weight:600}
+    .disclaimer{font-size:12px;line-height:1.7}
+
+    /* Dark theme: deliberately restyle every formerly white/light panel. */
+    :root[data-theme="dark"] .trust-item{color:#cfc4bb}
+    :root[data-theme="dark"] .trust-item strong{color:#f8f2ed}
+    :root[data-theme="dark"] .problem{background:#221912}
+    :root[data-theme="dark"] .problem .big-quote{color:#f6f1ed}
+    :root[data-theme="dark"] .problem .big-quote span{color:#df8942}
+    :root[data-theme="dark"] .problem .story-note p{color:#cac0b7}
+    :root[data-theme="dark"] .step:hover,
+    :root[data-theme="dark"] .step.active{background:#35271b;border-color:#644a34}
+    :root[data-theme="dark"] .step h3{color:#f8f3ef}
+    :root[data-theme="dark"] .step p{color:#cbc0b7}
+    :root[data-theme="dark"] .connect{background:#221912}
+    :root[data-theme="dark"] .app-card{background:#2c2017;color:#f6f1ed;border-color:#46372a}
+    :root[data-theme="dark"] .app-card p{color:#c7bbb2}
+    :root[data-theme="dark"] .app-card h3{color:#faf6f2}
+    :root[data-theme="dark"] .tiny-mark{color:#b9aca1}
+    :root[data-theme="dark"] .dash-stat{background:#3a2d22}
+    :root[data-theme="dark"] .dash-stat small{color:#c9bfb6}
+    :root[data-theme="dark"] .sparkline{border-bottom-color:#504134}
+    :root[data-theme="dark"] .dose-entry{border-color:#504135;background:#31251b}
+    :root[data-theme="dark"] .dose-entry small{color:#c8bdb4}
+    :root[data-theme="dark"] .status{background:#432d1b;color:#f0ba8d}
+    :root[data-theme="dark"] .sync-strip{color:#c9beb5}
+    :root[data-theme="dark"] .market-top .aside-note{color:#cbc1b8}
+    :root[data-theme="dark"] .competitor{background:#2c2017;border-color:#46372a;color:#f6f1ed;box-shadow:0 10px 30px rgba(0,0,0,.1)}
+    :root[data-theme="dark"] .competitor h3{color:#faf6f2}
+    :root[data-theme="dark"] .competitor p{color:#d0c7c0}
+    :root[data-theme="dark"] .competitor .country{color:#b5a89d}
+    :root[data-theme="dark"] .competitor .symbol{background:#3c2d20;color:#e6a570}
+    :root[data-theme="dark"] .competitor .price-note{border-top-color:#4e4035;color:#cac0b7}
+    :root[data-theme="dark"] .diff-panel{background:#2c2017;border:1px solid #46372a}
+    :root[data-theme="dark"] .diff-panel h3{color:#f8f4f0}
+    :root[data-theme="dark"] .diff-list span{color:#d5ccc4}
+    :root[data-theme="dark"] .diff-list i{color:#e08f4d}
+    :root[data-theme="dark"] .cost-card{background:#2c2017;border-color:#46372a;color:#f6f1ed}
+    :root[data-theme="dark"] .cost-table th{color:#bfb2a8;border-bottom-color:#4d3f34}
+    :root[data-theme="dark"] .cost-table td{color:#d1c8c1;border-bottom-color:#47392d}
+    :root[data-theme="dark"] .cost-table td:last-child{color:#faf5f1}
+    :root[data-theme="dark"] .cost-total{border-top-color:#4d3f34}
+    :root[data-theme="dark"] .cost-total span{color:#c2b6ad}
+    :root[data-theme="dark"] .estimate{background:#402d1e;color:#ebb78c}
+    :root[data-theme="dark"] .build-card{background:#2f2218;border-color:#4a3b2e}
+    :root[data-theme="dark"] .build-card p{color:#d0c7c0}
+    :root[data-theme="dark"] .mini-checks span{background:#3b2d22;color:#dfd7d0}
+    :root[data-theme="dark"] .feas-box.good{background:#352518;border-color:#594331}
+    :root[data-theme="dark"] .feas-box.risk{background:#342c22;border-color:#62503a}
+    :root[data-theme="dark"] .feas-box li{color:#d9d4d0}
+    :root[data-theme="dark"] .roadmap{background:#221912}
+    :root[data-theme="dark"] .timeline:before{background:#544233}
+    :root[data-theme="dark"] .phase .point{background:#35281d;border-color:#684f3b;color:#efcdb1}
+    :root[data-theme="dark"] .phase.active .point{background:#d37427;color:#2c1808}
+    :root[data-theme="dark"] .phase small{color:#de9a62}
+    :root[data-theme="dark"] .phase p,
+    :root[data-theme="dark"] .phase ul{color:#c9bfb7}
+    :root[data-theme="dark"] .phase h3{color:#f6f1ed}
+    :root[data-theme="dark"] .validation-card{background:#2c2017;border-color:#46372a;color:#f6f1ed}
+    :root[data-theme="dark"] .validation-card h3{color:#f8f4f0}
+    :root[data-theme="dark"] .validation-card .template{background:#201710;border-color:#5b493b;color:#d3c9c1}
+    :root[data-theme="dark"] .faq-list summary{color:#f8f2ee}
+    :root[data-theme="dark"] .faq-answer p,
+    :root[data-theme="dark"] .faq-answer li{color:#d2c9c2}
+    :root[data-theme="dark"] .source-list a{border-color:#4e4034;color:#d8cec6}
+    :root[data-theme="dark"] .source-list a:hover{background:#35261a;color:#f5c39b}
+    :root[data-theme="dark"] .theme-toggle{background:#30241b;border-color:#58483b;color:#f8f4f0}
+    :root[data-theme="dark"] .theme-toggle:hover{background:#443529}
+
+    @media(max-width:800px){
+      .competitor p,.competitor .price-note{font-size:14px}
+      .cost-table,.cost-table td{font-size:12px}
+      .section-head p{font-size:17px}
+      .nav-links.open{color:var(--ink)}
+      :root[data-theme="dark"] .nav-links.open{color:#f5eee8}
+    }
+    @media(max-width:500px){
+      h3{font-size:21px}
+      p{font-size:15px}
+      .competitor h3{font-size:20px}
+      .competitor p,.competitor .price-note{font-size:14px}
+      .faq-answer p,.faq-answer li{font-size:14px}
+    }
+
+
+    /* Final theme/accessibility hardening: no white-on-white CTA buttons in dark mode. */
+    .btn {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+      font-weight: 750;
+      letter-spacing: -.01em;
+      text-decoration: none;
+    }
+    .btn.light {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    .btn:focus-visible,
+    .theme-toggle:focus-visible,
+    .menu-toggle:focus-visible,
+    .scene-label:focus-visible,
+    .step:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--teal);
+      outline-offset: 4px;
+    }
+    .manufacturer-link { color: #7f3e08; font-weight: 700; }
+
+    :root[data-theme="dark"] .btn:not(.light) {
+      background: #d97d32;
+      border-color: #d97d32;
+      color: #2b1706;
+      box-shadow: 0 5px 18px rgba(39,211,191,.10);
+    }
+    :root[data-theme="dark"] .btn:not(.light):hover {
+      background: #eca367;
+      border-color: #eca367;
+      color: #2b1706;
+      box-shadow: 0 10px 26px rgba(39,211,191,.20);
+    }
+    :root[data-theme="dark"] .btn.light {
+      background: rgba(255,255,255,.035);
+      border-color: rgba(220,246,241,.28);
+      color: #f6f1ed;
+    }
+    :root[data-theme="dark"] .btn.light:hover {
+      background: rgba(39,211,191,.12);
+      border-color: #d37427;
+      color: #fffaf5;
+    }
+    :root[data-theme="dark"] .manufacturer-link { color: #e69d62; }
+    :root[data-theme="dark"] .eyebrow { color: #e4a068; }
+    :root[data-theme="dark"] .index { color: #e39e65; }
+    :root[data-theme="dark"] .step-no {
+      background: #463324;
+      color: #f4caa8;
+    }
+    :root[data-theme="dark"] .step:hover .step-no,
+    :root[data-theme="dark"] .step.active .step-no {
+      background: #d37427;
+      color: #2b1706;
+    }
+    :root[data-theme="dark"] .callout[style] { background: #362517; }
+    :root[data-theme="dark"] .callout[style] p { color: #decfc2; }
+    :root[data-theme="dark"] .callout[style] strong { color: #fff7f0; }
+    :root[data-theme="dark"] .tag-row .soft-tag { background: rgba(255,255,255,.025); border-color: #4e4034; }
+    :root[data-theme="dark"] .faq-list summary:after { color: #e7a167; }
+    :root[data-theme="dark"] .hero-note { color: #c4b9b0; }
+    :root[data-theme="dark"] .trust-item i { color: #df9253; }
+    :root[data-theme="dark"] .iconbox { border: 1px solid rgba(105,230,211,.14); }
+    :root[data-theme="dark"] .pill { border: 1px solid rgba(105,230,211,.15); }
+
+    @media (prefers-contrast: more) {
+      p, .small, .quiet, .hero-note, .competitor .country, .competitor .price-note { color: var(--ink); }
+      :root[data-theme="dark"] p,
+      :root[data-theme="dark"] .small,
+      :root[data-theme="dark"] .quiet,
+      :root[data-theme="dark"] .hero-note,
+      :root[data-theme="dark"] .competitor .country,
+      :root[data-theme="dark"] .competitor .price-note { color: #fbf5f1; }
+      .btn, .btn.light { border-width: 2px; }
+    }
+
+
+    /* Refined, airy product aesthetic inspired by modern diabetes-care websites. */
+    :root{--teal:#f2a000;--teal2:#ffc44d;--blue:#7650c8}
+    .brand{font-size:clamp(28px,2.25vw,36px);gap:12px;letter-spacing:-.06em}
+    .brand-icon{height:44px;width:44px;border-radius:15px;background:#ffad00;color:#fff;box-shadow:0 8px 22px #f2a0002b}
+    .brand-icon svg{width:28px}
+    .brand span[style*="/ LAB"]{font-size:12px!important;letter-spacing:.14em!important}
+    .topbar{height:86px;background:rgba(255,255,255,.91);border-bottom-color:rgba(25,32,34,.07)}
+    .nav-links{font-size:13px;color:#4a4139;gap:22px}
+    .nav-links a:after{background:#f2a000}
+    .btn{background:#f0a000;border-color:#f0a000;color:#201800;box-shadow:0 8px 20px #f0a0001c}
+    .btn:hover{background:#ffc247;border-color:#ffc247;color:#241900}
+    .btn.light{background:rgba(255,255,255,.75);border-color:#dfdcd9;color:#372d25}
+    .hero{padding:64px 0 72px}
+    .hero h1 span{color:#e99a00}
+    .hero:before{width:760px;height:760px;right:-190px;top:-270px;background:radial-gradient(circle,#fff0c9 0,rgba(255,240,201,0) 70%)}
+    .hero-stage{min-height:650px;border-radius:30px;background:radial-gradient(ellipse at 50% 40%,#433224 0,#132c35 49%,#0c2028 100%);box-shadow:0 28px 75px rgba(24,48,53,.17)}
+    .scene-mount{inset:18px 0 2px;height:calc(100% - 20px)}
+    .hero-grid{grid-template-columns:.82fr 1.18fr;gap:34px}
+    .hero-copy{padding:8px 0 24px}
+    .hero .lede{font-size:20px;line-height:1.7}
+    .eyebrow{color:#a86e00}
+    .eyebrow:before{background:#f2a000}
+    .pill{background:#fff0c9;color:#8b5a00}
+    .theme-toggle{width:44px;height:44px;flex-basis:44px}
+    :root[data-theme="dark"]{--teal:#ffb11b;--teal2:#ffd16b;--blue:#9c83ee}
+    :root[data-theme="dark"] .topbar{background:rgba(16,25,28,.9)}
+    :root[data-theme="dark"] .brand-icon{background:#ffb11b;color:#352300}
+    :root[data-theme="dark"] .hero:before{background:radial-gradient(circle,#49381a 0,rgba(73,56,26,0) 70%)}
+    :root[data-theme="dark"] .hero h1 span{color:#ffc247}
+    :root[data-theme="dark"] .btn{background:#ffb11b;border-color:#ffb11b;color:#251b00}
+    :root[data-theme="dark"] .btn.light{background:transparent;color:var(--ink);border-color:var(--line)}
+    :root[data-theme="dark"] .eyebrow{color:#ffc247}
+    @media(max-width:1050px){.hero-stage{min-height:590px}.nav-links{gap:14px}.brand{font-size:29px}}
+    @media(max-width:800px){.topbar{height:72px}.hero{padding:42px 0 48px}.hero-stage{min-height:600px}.brand{font-size:28px}.brand-icon{width:40px;height:40px}.hero-grid{grid-template-columns:1fr}.nav-links{top:71px;background:rgba(255,255,255,.98)}:root[data-theme="dark"] .nav-links.open{background:rgba(16,25,28,.98)}}
+    @media(max-width:500px){.brand{font-size:25px}.brand-icon{width:38px;height:38px}.hero-stage{min-height:520px}.hero .lede{font-size:18px}}
+
+    /* FINAL CROWN COPPER PALETTE — overrides older theme colors */
+    :root{--teal:#B87333 !important;--teal2:#D9A06A !important;--blue:#8C4A22 !important;--crown-copper:#B87333;--crown-copper-light:#D9A06A;--crown-copper-dark:#8C4A22}
+    :root[data-theme="dark"]{--teal:#D9A06A !important;--teal2:#E9C29D !important;--blue:#E0A16C !important}
+    .brand-icon{background:#B87333 !important;color:#FFF8F0 !important;box-shadow:0 8px 22px rgba(184,115,51,.24) !important}
+    .nav-links a:after,.eyebrow:before{background:#B87333 !important}
+    .btn,.portal-nav-btn{background:#B87333 !important;border-color:#B87333 !important;color:#FFF8F0 !important;box-shadow:0 8px 20px rgba(184,115,51,.2) !important}
+    .btn:hover,.portal-nav-btn:hover{background:#8C4A22 !important;border-color:#8C4A22 !important;color:#fff !important}
+    .hero h1 span,.eyebrow,.index,.trust-item i{color:#A85D32 !important}
+    .pill{background:#F6E7D9 !important;color:#7D431E !important}
+    .iconbox{background:#F6E7D9 !important;color:#8C4A22 !important}
+    .callout{background:#F7EEE6 !important}.callout .signal{background:#EED9C7 !important;color:#8C4A22 !important}
+    .hero:before{background:radial-gradient(circle,#F3DCC9 0,rgba(243,220,201,0) 70%) !important}
+    :root[data-theme="dark"] .brand-icon{background:#B87333 !important;color:#FFF8F0 !important}
+    :root[data-theme="dark"] .btn,:root[data-theme="dark"] .portal-nav-btn{background:#B87333 !important;border-color:#B87333 !important;color:#FFF8F0 !important}
+    :root[data-theme="dark"] .btn:hover,:root[data-theme="dark"] .portal-nav-btn:hover{background:#8C4A22 !important;border-color:#8C4A22 !important}
+    :root[data-theme="dark"] .hero h1 span,:root[data-theme="dark"] .eyebrow{color:#D9A06A !important}
+    :root[data-theme="dark"] .hero:before{background:radial-gradient(circle,#49301F 0,rgba(73,48,31,0) 70%) !important}
+    :root[data-theme="dark"] .pill{background:#3B2A1F !important;color:#E9C29D !important}
+  
+    /* Final requested refinements: large navigation and visible institutional credit */
+    .topbar .nav .nav-links{gap:clamp(20px,2.1vw,36px)!important;font-size:clamp(16px,1.15vw,20px)!important;font-weight:700!important}
+    .topbar .nav .nav-links a{padding:12px 0!important;white-space:nowrap}
+    .footer-credit{font-family:'Manrope',sans-serif;font-size:clamp(26px,3.4vw,42px);font-weight:800;letter-spacing:-.045em;color:#e4a978;margin:28px 0 22px}
+    .footer-links{font-size:15px;gap:22px 28px}
+    @media(max-width:800px){
+      .topbar .nav .nav-links{font-size:19px!important;gap:18px!important}
+      .footer-credit{font-size:28px}
+      .footer-links{font-size:16px}
+    }
+
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="CROWN home"><span class="brand-icon"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M4 19.5 6.5 8l6.1 5.8L14 5l2.2 8.8L22 8l2 11.5H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 22h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>CROWN<span style="font-weight:500;color:#948a82;font-size:11px;letter-spacing:.13em;margin-left:1px">/ LAB</span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation"><a href="#product">The product</a><a href="#how">How it works</a><a href="#ecosystem">Connected care</a><a href="#market">Landscape</a><a href="#india">India fit</a><a href="#build">Build plan</a><a href="about.html">About Us</a><a href="login.html">Patient / Doctor Login</a></nav>
+      <div class="nav-end">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.6 8.6 0 1 0 20.2 15.2Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        </button>
+        <a class="btn portal-nav-btn" href="login.html">Patient / Doctor Login <span class="arrow">↗</span></a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" id="product">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">A connected care concept · 01 / 06</div>
+          <h1>A calmer way to keep insulin <span>in view.</span></h1>
+          <p class="lede">Meet CROWN: a modular smart cap concept designed to bring gentle guidance, dose-event history and injection-site rotation into one everyday routine.</p>
+          <div class="hero-actions"><a class="btn" href="#how">Explore the experience <span class="arrow">↓</span></a><a class="btn light" href="#anatomy">Explore the 3D model <span class="arrow">↗</span></a></div>
+          <div class="proof-row"><div class="mini-avatars" aria-hidden="true"><span>01</span><span>02</span><span>03</span></div><div><strong>Built around the routine.</strong><br><span>Not another screen to manage.</span></div></div>
+          <p class="hero-note">An early-stage product concept, not a clinically validated medical device. Sensor capabilities and compatibility require prototype testing.</p>
+        </div>
+        <div class="hero-stage reveal delay-2" aria-label="Interactive three-dimensional concept model of the CROWN smart insulin pen attachment">
+          <div class="stage-top"><span class="live-dot">Interactive prototype</span><span>Model 01.0 / concept</span></div>
+          <div class="stage-caption">CROWN · connected pen system</div>
+          <div class="scene-mount" id="heroScene" tabindex="0" aria-label="Interactive 3D pen model. Drag to rotate. Use the part labels to explore components."></div>
+          <button class="scene-label lab-sensor active" data-part="sensor"><b><span class="num">01</span>Sensor crown</b><small>Event sensing + indicator ring</small></button>
+          <button class="scene-label lab-dose" data-part="feedback"><b><span class="num">02</span>Feedback control</b><small>Light / haptic confirmation</small></button>
+          <button class="scene-label lab-cartridge" data-part="cartridge"><b><span class="num">03</span>Pen window</b><small>Existing pen stays visible</small></button>
+          <button class="scene-label lab-connect" data-part="connectivity"><b><span class="num">04</span>Connected core</b><small>BLE sync + local memory</small></button>
+          <div class="stage-footer"><div class="stage-product"><div class="mono">Modular attachment concept</div><strong>CROWN / 01</strong><span>White · deep teal · signal blue</span></div><div class="drag-hint"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.4"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M4 12h16"/></svg>DRAG TO ROTATE</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip"><div class="shell trust-items">
+      <div class="trust-item"><i>◌</i><div><strong>One modular crown</strong><span>Retrofit-first concept</span></div></div>
+      <div class="trust-item"><i>⌁</i><div><strong>Offline-first cues</strong><span>Critical prompts on-device</span></div></div>
+      <div class="trust-item"><i>↗</i><div><strong>Shared care view</strong><span>Patient + clinician app</span></div></div>
+      <div class="trust-item"><i>◎</i><div><strong>Designed for India</strong><span>Affordability as a design goal</span></div></div>
+    </div></div>
+
+    <section class="section" id="anatomy">
+      <div class="shell">
+        <div class="section-head reveal"><div class="eyebrow section-kicker">Product anatomy · 02 / 06</div><h2>Small attachment.<br>More context around every dose.</h2><p>The crown is imagined as a reusable electronics module above a compatible insulin pen. Select a part in the viewer to learn what it could do—and what still needs to be proven.</p></div>
+        <div class="grid-2">
+          <div class="surface dark reveal">
+            <span class="index">MODEL / EXPLORE PARTS</span><div id="partDetails"><div class="pill">Part 01 · sensor crown</div><h3 style="margin-top:20px">The sensing layer</h3><p>A compact sensor and microcontroller package could detect pen handling and dose-related events. Which events it can reliably infer must be established with bench testing; it should never guess a dose or body site and present it as certain.</p><div class="tag-row"><span class="soft-tag">IMU / event sensing</span><span class="soft-tag">LED indicator</span><span class="soft-tag">Validation required</span></div></div>
+          </div>
+          <div class="surface reveal delay-1">
+            <span class="index">DESIGN INTENT / NOT FINAL SPECS</span>
+            <div class="grid-2" style="gap:16px">
+              <div><div class="iconbox"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 7h10M7 17h10"/><circle cx="12" cy="12" r="8"/></svg></div><h3 style="font-size:17px">Readable by design</h3><p class="small">High-contrast status, a clear dose-event history and simple language for different ages and levels of digital confidence.</p></div>
+              <div><div class="iconbox"><svg viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0v4l2 3H4l2-3v-4Z"/><path d="M9 20h6"/></svg></div><h3 style="font-size:17px">Useful offline</h3><p class="small">Local reminders and confirmation cues should continue even when a phone, network or cloud account is unavailable.</p></div>
+              <div><div class="iconbox"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M8 7V4h8v3M8 12h8M8 16h5"/></svg></div><h3 style="font-size:17px">Modular fit</h3><p class="small">Replaceable adapter collars could support different pen families after fit, stability and dose-function testing.</p></div>
+              <div><div class="iconbox"><svg viewBox="0 0 24 24"><path d="M5 12a7 7 0 0 1 12-5l2 2"/><path d="M19 4v5h-5M19 12a7 7 0 0 1-12 5l-2-2"/><path d="M5 20v-5h5"/></svg></div><h3 style="font-size:17px">Designed to iterate</h3><p class="small">A serviceable prototype lets the team test sensors and electronics before committing to tooling or mass production.</p></div>
+            </div>
+          </div>
+        </div>
+        <p class="small quiet" style="margin:18px 0 0">Model note: the animated pen is a procedural 3D illustration to communicate the concept—not an engineering drawing, manufacturing specification or proof of working sensors.</p>
+      </div>
+    </section>
+
+    <section class="section problem" id="problem">
+      <div class="shell problem-grid">
+        <div class="reveal"><div class="eyebrow section-kicker">The problem · 03 / 06</div><div class="big-quote">Diabetes care is already a lot to remember. <span>The pen should help the routine feel clearer, not heavier.</span></div><div class="story-note"><p><strong>Our honest starting point:</strong> this concept focuses on a visible design gap—dose timing, site rotation and follow-up context can be spread across memory, a pen, notes and a phone. We have not been given a personal founder story or collected research results, so this page does not invent either. The next step is to verify the problem with people who use insulin and diabetes-care professionals.</p></div></div>
+        <div class="pain-stack reveal delay-1">
+          <div class="pain-row"><div class="n">01</div><div><h3>“Did I take it already?”</h3><p>A missing or unclear record can create uncertainty. CROWN aims to log confirmed events, show when a record is uncertain and avoid telling someone to repeat a dose.</p></div></div>
+          <div class="pain-row"><div class="n">02</div><div><h3>Site rotation is easy to forget</h3><p>A simple recent-site history may help a patient follow the rotation plan agreed with their care team. Automatic abdomen/thigh recognition is a research question—not a current capability claim.</p></div></div>
+          <div class="pain-row"><div class="n">03</div><div><h3>Appointments give only a snapshot</h3><p>With consent, a time-stamped log may make it easier to discuss patterns, missed records and practical barriers during a review.</p></div></div>
+          <div class="pain-row"><div class="n">04</div><div><h3>Connectivity is not always reliable</h3><p>Essential confirmation should happen on the device. Phone syncing improves visibility later; it should not be a safety dependency.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="shell">
+        <div class="section-head reveal"><div class="eyebrow section-kicker">The experience · 04 / 06</div><h2>A guided loop, from reminder to review.</h2><p>The interface should stay quiet and predictable. No sound plays on this website; the product concept may use optional voice prompts, but light and haptic feedback should be available as alternatives.</p></div>
+        <div class="how-grid">
+          <div class="how-list reveal" id="steps">
+            <button class="step active" data-step="0"><span class="step-no">01</span><span><h3>Remind</h3><p>A schedule reminder appears at the prescribed time. The app can be a backup, not the only route.</p></span></button>
+            <button class="step" data-step="1"><span class="step-no">02</span><span><h3>Guide</h3><p>Short prompts walk through the routine; a user confirms the intended plan. The concept never calculates a new dose.</p></span></button>
+            <button class="step" data-step="2"><span class="step-no">03</span><span><h3>Check the site</h3><p>The user confirms the site and sees recent locations to support their clinician-approved rotation plan.</p></span></button>
+            <button class="step" data-step="3"><span class="step-no">04</span><span><h3>Record and sync</h3><p>The event, source and confidence are stored locally, then synced to the app when available.</p></span></button>
+            <button class="step" data-step="4"><span class="step-no">05</span><span><h3>Review together</h3><p>Patient and care team can discuss trends and gaps in context, without treating a log as a clinical decision.</p></span></button>
+          </div>
+          <div class="flow-panel reveal delay-1" id="flowPanel"><div class="eyebrow">The routine / step 01</div><h3 id="flowTitle">A reminder that arrives at the right moment.</h3><p id="flowText">A discreet light or haptic cue signals a planned event. The user can review the prescribed plan before taking any action.</p><div class="flow-metrics"><div class="flow-metric"><strong id="flowMetric1">On-device</strong><span>Primary cue</span></div><div class="flow-metric"><strong id="flowMetric2">No sound</strong><span>Website behaviour</span></div><div class="flow-metric"><strong id="flowMetric3">Optional</strong><span>Phone backup</span></div></div><div style="position:absolute;right:27px;bottom:20px;font:9px 'DM Mono',monospace;color:#917864;letter-spacing:.1em">CROWN / FLOW 01—05</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section connect" id="ecosystem">
+      <div class="shell">
+        <div class="section-head reveal"><div class="eyebrow section-kicker">Connected care · 05 / 06</div><h2>The same event.<br>Two clearer perspectives.</h2><p>Live or near-real-time app connectivity can help patients see what was logged and help clinicians understand patterns between appointments—only with permission, useful context and validated data.</p></div>
+        <div class="connect-layout">
+          <div class="app-card reveal"><div class="app-card-head"><h3>Patient app</h3><span class="tiny-mark">Concept UI / 01</span></div><div class="dash-stat-row"><div class="dash-stat"><strong>—</strong><small>Events today</small></div><div class="dash-stat"><strong>—</strong><small>On time</small></div><div class="dash-stat"><strong>—</strong><small>Sites logged</small></div></div><div class="sparkline"><svg viewBox="0 0 500 90" preserveAspectRatio="none" aria-label="Illustrative data trend"><defs><linearGradient id="fillGraph" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b86018" stop-opacity=".20"/><stop offset="1" stop-color="#b86018" stop-opacity="0"/></linearGradient></defs><path d="M0 63 C24 60 35 29 64 39 S99 70 122 58 S156 31 179 41 S211 68 237 51 S273 26 295 37 S333 66 358 48 S394 38 419 44 S460 24 500 31 L500 90 L0 90Z" fill="url(#fillGraph)"/><path d="M0 63 C24 60 35 29 64 39 S99 70 122 58 S156 31 179 41 S211 68 237 51 S273 26 295 37 S333 66 358 48 S394 38 419 44 S460 24 500 31" fill="none" stroke="#b55f19" stroke-width="2"/></svg></div><div class="dose-entry"><div><strong>Recent dose event</strong><small>Time and units only when validated as captured</small></div><span class="status">Example data</span></div><div class="tag-row"><span class="soft-tag">Reminder settings</span><span class="soft-tag">Site history</span><span class="soft-tag">Share by consent</span></div></div>
+          <div class="clinician-card reveal delay-1"><div class="app-card-head"><h3>Clinician view</h3><span class="tiny-mark" style="color:#b89f8b">Concept UI / 02</span></div><div class="patient-list"><div class="patient-line"><span class="person-dot">A</span><div><strong>Adherence overview</strong><small>Time-stamped dose-event history</small><div class="bar"><i style="width:74%"></i></div></div><em>Review</em></div><div class="patient-line"><span class="person-dot">B</span><div><strong>Site rotation summary</strong><small>Recent user-confirmed locations</small><div class="bar"><i style="width:58%"></i></div></div><em>Discuss</em></div><div class="patient-line"><span class="person-dot">C</span><div><strong>Glucose context</strong><small>Only from a compatible connected source</small><div class="bar"><i style="width:86%"></i></div></div><em>Sync</em></div></div><div style="margin-top:21px;border-top:1px solid #2b4a55;padding-top:15px;color:#c4b2a4;font-size:10px;line-height:1.6">Illustrative dashboard: no real patient data, no clinical recommendation and no live backend are connected.</div></div>
+        </div>
+        <div class="sync-strip"><span><i>↗</i> Device confirms locally</span><span>→</span><span><i>◉</i> Patient reviews the log</span><span>→</span><span><i>⌁</i> Clinician reviews by consent</span></div>
+        <div class="callout"><div class="signal">i</div><p><strong>Safety boundary:</strong> the app is intended to support adherence conversations, not prescribe doses or replace clinical judgement. Data from a pen attachment, glucose sensor and patient-entered note must be clearly distinguished.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="market">
+      <div class="shell">
+        <div class="market-top"><div class="section-head reveal"><div class="eyebrow section-kicker">Market & competition · 06 / 06</div><h2>Connected insulin is real.<br>The gap is in fit and access.</h2><p>Smart pens, caps and attachments already exist. CROWN should not claim to be the first. Its hypothesis is a local-first, modular guidance layer designed around Indian affordability, multiple pen families and shared care.</p></div><div class="aside-note reveal">Competitor prices and availability vary by country, prescription, insurance and distribution. Public prices are not consistently listed; do not compare a subscription, a pen and a cap as if they were the same product.</div></div>
+        <div class="competitors">
+          <article class="competitor reveal"><span class="country">United States · Medtronic</span><div class="symbol">IN</div><h3>InPen</h3><p>A connected insulin pen system with dose tracking and app-based diabetes-management features.</p><div class="price-note"><strong>Price:</strong> current cash price not reliably comparable from public product pages; prescription / coverage dependent.</div><a class="small manufacturer-link" style="margin-top:13px" href="https://www.medtronicdiabetes.com/products/inpen" target="_blank" rel="noreferrer">Manufacturer details ↗</a></article>
+          <article class="competitor reveal delay-1"><span class="country">Denmark · Novo Nordisk</span><div class="symbol">N6</div><h3>NovoPen 6 / Echo Plus</h3><p>Reusable connected pens that transfer dose information to supported apps and can share records with care teams in supported markets.</p><div class="price-note"><strong>Price:</strong> varies by market and reimbursement; verify country-specific availability.</div><a class="small manufacturer-link" style="margin-top:13px" href="https://www.novonordisk.com/content/nncorp/global/en/our-products/smart-pens/novopen-6.html" target="_blank" rel="noreferrer">Manufacturer details ↗</a></article>
+          <article class="competitor reveal delay-2"><span class="country">United States · Eli Lilly</span><div class="symbol">T+</div><h3>Tempo Smart Button</h3><p>A button accessory for certain Tempo insulin pens that records dose information for use with a compatible app ecosystem.</p><div class="price-note"><strong>Price:</strong> depends on the linked pen, market and coverage; confirm with provider.</div><a class="small manufacturer-link" style="margin-top:13px" href="https://tempo.lilly.com/" target="_blank" rel="noreferrer">Manufacturer details ↗</a></article>
+          <article class="competitor reveal delay-3"><span class="country">United States · Bigfoot Biomedical</span><div class="symbol">BF</div><h3>Bigfoot Unity</h3><p>A connected diabetes-management system with smart-cap components designed around compatible insulin pens and glucose information.</p><div class="price-note"><strong>Price:</strong> device and coverage details are market-specific; obtain a current quote.</div><a class="small manufacturer-link" style="margin-top:13px" href="https://www.bigfootbiomedical.com/" target="_blank" rel="noreferrer">Manufacturer details ↗</a></article>
+        </div>
+        <div class="diff-panel reveal"><div><div class="eyebrow">Our position / hypothesis</div><h3>Don't outspend the leaders. Solve a narrower problem, closer to home.</h3><p class="small">An advantage exists only if user research and prototype tests prove it.</p></div><div class="diff-list"><span><i>↗</i> Retrofit approach rather than replacing the whole pen</span><span><i>↗</i> Essential cues work without a phone connection</span><span><i>↗</i> Site-rotation history made clear and user-confirmed</span><span><i>↗</i> Indian-language onboarding and price testing from day one</span><span><i>↗</i> A simpler consent-based clinician view</span><span><i>↗</i> Compatibility stated clearly, not called universal too early</span></div></div>
+        <p class="small quiet" style="margin-top:18px">Historical price context: a 2019 clinical review reported smart-cap examples including Timesulin at about £12 and Dukada Trio around €40, while another connected cap was listed as a $25/month service at that time. These are dated historical figures, not current retail offers. See <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6858073/" target="_blank" rel="noreferrer" style="text-decoration:underline">the review ↗</a>.</p>
+      </div>
+    </section>
+
+    <section class="section india" id="india">
+      <div class="shell">
+        <div class="section-head reveal"><div class="eyebrow section-kicker">Global presence & India fit</div><h2>Built for the realities of care here.</h2><p>India has a large diabetes burden, but a large population alone does not prove a market. CROWN should begin with a defined group: adults on daily insulin who use pen devices, have recurring dose-record or site-rotation friction, and are supported by a diabetes clinic or educator.</p></div>
+        <div class="india-grid"><div class="india-stat reveal"><div class="number">89.8M</div><p>estimated adults living with diabetes in India in the International Diabetes Federation's 2024 country data.</p><div class="source">SOURCE / IDF · 2024 DATA</div><div style="margin-top:21px"><a href="https://idf.org/our-network/regions-and-members/south-east-asia/members/india/" target="_blank" rel="noreferrer" class="small" style="color:#e4a979">Read the country profile ↗</a></div></div>
+          <div class="india-points">
+            <div class="india-point reveal delay-1"><span class="n">01 / REGULATION</span><h3>Approval is not assumed</h3><p>No CDSCO approval is claimed for CROWN. The intended use and risk class must be reviewed by an Indian medical-device regulatory specialist before trials or sale.</p></div>
+            <div class="india-point reveal delay-2"><span class="n">02 / AFFORDABILITY</span><h3>Price is a design constraint</h3><p>Test willingness to pay separately in urban clinics and lower-resource settings. Explore a one-time hardware price and a free core patient app before adding any paid tier.</p></div>
+            <div class="india-point reveal delay-1"><span class="n">03 / DISTRIBUTION</span><h3>Different settings, different needs</h3><p>Urban pilots may be easier to support first. Rural use needs battery life, offline behaviour, repairability, local-language onboarding and low data dependence.</p></div>
+            <div class="india-point reveal delay-2"><span class="n">04 / ECOSYSTEM</span><h3>Local build, careful partners</h3><p>Explore Make in India-aligned prototyping, Startup India incubation and BIRAC routes where the call and eligibility fit. These programmes are not endorsements or guaranteed funding.</p></div>
+          </div></div>
+        <div class="india-bottom"><span style="font-size:18px">↗</span><div><b>Foreign price vs. Indian willingness to pay:</b> use overseas smart-cap price reports only as a reference. Set an initial concept range for testing—not a promise—then validate it with patients, caregivers, clinicians and distributors. Imported sensors and small-volume assembly may dominate early cost.</div></div>
+        <div class="source-list"><a href="https://www.cdsco.gov.in/opencms/opencms/en/Medical-Device-Diagnostics/Medical-Device-Diagnostics/" target="_blank" rel="noreferrer">CDSCO device framework ↗</a><a href="https://www.cdsco.gov.in/opencms/opencms/en/Acts-and-rules/Medical-Devices-Rules/" target="_blank" rel="noreferrer">Medical Devices Rules, 2017 ↗</a><a href="https://www.startupindia.gov.in/" target="_blank" rel="noreferrer">Startup India ↗</a><a href="https://www.birac.nic.in/" target="_blank" rel="noreferrer">BIRAC ↗</a></div>
+      </div>
+    </section>
+
+    <section class="section" id="build">
+      <div class="shell">
+        <div class="section-head reveal"><div class="eyebrow section-kicker">Feasibility & money</div><h2>Prototype the riskiest assumptions first.</h2><p>A student-scale proof of concept is feasible with off-the-shelf electronics and a 3D-printed housing. A safe, accurate, compatible, manufacturable medical device is a much larger project requiring testing, quality systems and regulatory work.</p></div>
+        <div class="build-grid">
+          <div class="cost-card reveal"><div class="cost-title"><div><span class="index">EARLY PROTOTYPE / 1 UNIT</span><h3>Indicative bill of materials</h3></div><span class="estimate">Planning estimate</span></div><table class="cost-table"><thead><tr><th>Component</th><th>Why it's needed</th><th>Rough cost</th></tr></thead><tbody>
+            <tr><td>BLE microcontroller board</td><td>Processing + phone connectivity</td><td>₹250–600</td></tr>
+            <tr><td>IMU / event sensors</td><td>Motion and handling data</td><td>₹100–350</td></tr>
+            <tr><td>LEDs + haptic motor</td><td>Quiet confirmation cues</td><td>₹50–180</td></tr>
+            <tr><td>Battery + charging / power</td><td>Portable operation</td><td>₹150–400</td></tr>
+            <tr><td>PCB, small parts, wiring</td><td>Connect and mount electronics</td><td>₹250–700</td></tr>
+            <tr><td>3D-printed shell + adapter</td><td>Fit and ergonomic prototypes</td><td>₹500–1,500</td></tr>
+            <tr><td>Assembly / iteration allowance</td><td>Rework and test consumables</td><td>₹300–800</td></tr>
+          </tbody></table><div class="cost-total"><strong>₹1,600–4,530</strong><span>Per early prototype, approximate parts + fabrication only; excludes engineering time, app/cloud work, testing, certification and clinical/regulatory costs.</span></div><p class="small quiet" style="margin:14px 0 0">These are planning assumptions, not supplier quotes. Reprice with local distributors and a fabrication shop before presenting a budget.</p><div class="source-list"><a href="https://robu.in/" target="_blank" rel="noreferrer">Robu.in ↗</a><a href="https://in.element14.com/" target="_blank" rel="noreferrer">element14 India ↗</a><a href="https://www.mouser.in/" target="_blank" rel="noreferrer">Mouser India ↗</a></div></div>
+          <div class="build-stack reveal delay-1">
+            <div class="build-card"><h3>Materials & equipment</h3><p>Use a small BLE dev board, IMU / hall or optical sensors for experiments, a low-power LED, vibration motor, rechargeable cell with protection, custom PCB later, and a 3D-printed enclosure with replaceable adapter collars.</p><div class="mini-checks"><span>CAD + 3D printer</span><span>Soldering station</span><span>Multimeter / bench supply</span><span>Phone test devices</span><span>Force / fit fixtures</span><span>Test logs + version control</span></div></div>
+            <div class="build-card"><h3>Prototype difficulty: medium–high</h3><p>Electronic sensing and a demonstration app are achievable. Reliable dose-event capture, safe fit across pen brands, cleaning, battery life, sensor accuracy, privacy and a medical-device quality process are the hard parts.</p></div>
+            <div class="build-card"><h3>Price hypothesis to test</h3><p>Start by testing a one-time accessory price around ₹1,999–₹2,999 with a basic app included. This is a willingness-to-pay experiment—not a launch price, validated cost target or promise. Do not set a price until BOM and user interviews are complete.</p></div>
+          </div>
+        </div>
+        <div class="feasibility reveal"><div class="feas-box good"><h3>Why it's worth exploring</h3><ul><li>It targets a concrete daily routine rather than a broad “digital health” pitch.</li><li>Prototype electronics and housings can be tested incrementally.</li><li>A shared record may improve the quality of patient–clinician conversations.</li><li>Modular hardware may avoid replacing an entire pen if compatibility proves possible.</li></ul></div><div class="feas-box risk"><h3>What could stop it</h3><ul><li>Pen-brand differences make one “universal” fit unrealistic.</li><li>False dose logs could create dangerous confusion.</li><li>Patients may not pay for a separate accessory.</li><li>Regulatory, cybersecurity, battery and reliability work may cost more than the hardware.</li></ul></div></div>
+      </div>
+    </section>
+
+    <section class="section roadmap" id="future">
+      <div class="shell"><div class="section-head reveal"><div class="eyebrow section-kicker">What happens next</div><h2>Prove the routine before polishing the hardware.</h2><p>Every milestone should earn the next one. The goal is evidence and safer product decisions—not a feature checklist.</p></div>
+        <div class="timeline">
+          <div class="phase active reveal"><div class="point">01</div><small>Weeks 1–4</small><h3>Listen first</h3><p>Interview users and clinicians before locking the design.</p><ul><li>20–30 insulin pen users</li><li>5–8 clinicians / educators</li><li>Pen model + price map</li></ul></div>
+          <div class="phase reveal delay-1"><div class="point">02</div><small>Weeks 5–10</small><h3>Bench prototype</h3><p>Check fit and whether events can be detected reliably.</p><ul><li>One pen family first</li><li>Log uncertainty explicitly</li><li>Test battery + enclosure</li></ul></div>
+          <div class="phase reveal delay-2"><div class="point">03</div><small>Weeks 11–18</small><h3>Usability pilot</h3><p>With appropriate ethics, regulatory and clinical oversight.</p><ul><li>Human-factors review</li><li>Privacy / threat model</li><li>Safety hazard analysis</li></ul></div>
+          <div class="phase reveal delay-3"><div class="point">04</div><small>After evidence</small><h3>Manufacture responsibly</h3><p>Only proceed when reliability, demand and pathway are clear.</p><ul><li>QMS + regulatory advice</li><li>Supplier qualification</li><li>IP filing strategy</li></ul></div>
+        </div>
+        <div class="callout" style="margin-top:32px"><div class="signal">↗</div><p><strong>Patent plan:</strong> conduct a prior-art and freedom-to-operate search before public claims or filing. Document what is genuinely novel—such as a validated sensing method, safe retrofit interface or technical signal-processing approach—then speak with an Indian patent professional about provisional filing, inventorship, ownership and disclosure timing. A broad idea like “smart insulin cap” is unlikely to be protectable on its own. Consider design registration for distinctive ornamental housing; protect software/know-how where appropriate.</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="validation">
+      <div class="shell"><div class="section-head reveal"><div class="eyebrow section-kicker">Evidence, not invented numbers</div><h2>Bring real voices into the next version.</h2><p>There are no user-survey results or doctor testimonials supplied for this concept. Use the template below after data collection; don't present example metrics, mock dashboards or the 3D model as evidence that the product works.</p></div>
+        <div class="validation">
+          <div class="validation-card reveal"><span class="index">RESEARCH PLAN / USERS</span><div class="number">20–30</div><h3>Insulin pen users to interview</h3><p>Recruit people who use insulin pens every day, including a mix of ages, cities, digital confidence and pen brands. Ask about actual routines before demonstrating the concept to avoid leading the answers.</p><div class="template"><strong>Report after fieldwork:</strong><br>Participants: n = ___<br>Often unsure whether a dose was taken: ___%<br>Would use site history: ___%<br>Price they would consider: ₹___–₹___<br>Top concern: __________________</div></div>
+          <div class="validation-card reveal delay-1"><span class="index">RESEARCH PLAN / EXPERTS</span><div class="number">5–8</div><h3>Clinicians and diabetes educators</h3><p>Ask what a useful report should show, what constitutes a dangerous false positive, how consent should work and whether the proposed workflow fits real appointments.</p><div class="template"><strong>Record only confirmed feedback:</strong><br>Role / setting: __________________<br>What they found useful: ___________<br>Safety concern raised: ____________<br>Change requested: ________________<br>Permission to quote: Yes / No</div></div>
+        </div>
+        <div class="surface reveal" style="margin-top:18px"><h3>One-minute explanation</h3><p style="font-size:15px;color:#67574a;margin-bottom:0">“Imagine your insulin pen had a small smart cap. It could remind you about the routine, help you record when you used the pen, and keep a simple history of the injection sites you confirm. Later, with your permission, the information could appear in an app so you and your doctor can talk about your routine. It would not choose your insulin dose, and it would still need lots of testing before anyone should rely on it.”</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="questions">
+      <div class="shell faq-grid"><div class="faq-intro reveal"><div class="eyebrow section-kicker">The full brief</div><h2>Answers to the questions investors will ask.</h2><p>Use these as working answers for a presentation. Update assumptions as interviews, engineering tests and regulatory review produce evidence.</p><div class="pill">Working draft · concept stage</div></div>
+        <div class="faq-list reveal delay-1">
+          <details open><summary>What is the product, its colour, logo and team identity?</summary><div class="faq-answer"><p><strong>Name:</strong> CROWN (working product name). <strong>Definition:</strong> a proposed modular smart insulin-pen attachment that adds reminders, dose-event logging and user-guided injection-site history with optional app connectivity. <strong>Visual identity:</strong> matte white shell, deep teal body, signal-blue highlights and a small crown mark. <strong>Team identity:</strong> “CROWN LAB” is a placeholder lock-up; replace it with the actual team name and member names before presenting. Check trademark availability before using the name commercially.</p></div></details>
+          <details><summary>How would it be used, made and how complex is it?</summary><div class="faq-answer"><p>The intended flow is attach to a tested compatible pen, pair with the app, set a clinician-provided schedule, confirm the site and review the event log. Manufacturing would involve a custom PCB, low-power BLE microcontroller, event sensors, battery protection, LED / haptic output, and a cleanable enclosure with an adapter collar. A 3D-printed demonstrator is medium complexity; reliable sensing, safe compatibility, regulatory and production readiness are high complexity.</p></div></details>
+          <details><summary>Who suffers, and why this problem over others?</summary><div class="faq-answer"><p>The initial group is adults who use insulin pens daily and have difficulty keeping dose records or site rotation organised, especially where care teams would benefit from better between-visit context. The honest rationale is that the routine is frequent and information is split across memory, device and app—not that a founder has lived experience we cannot substantiate. Interviews must confirm how severe and common the problem is, and whether this specific solution is wanted.</p></div></details>
+          <details><summary>Does it already exist? Can CROWN beat the competitors?</summary><div class="faq-answer"><p>Connected products already exist, including Medtronic InPen, NovoPen 6 / Echo Plus, Lilly's Tempo ecosystem and Bigfoot Unity. CROWN should compete on a narrower hypothesis: a modular attachment, quiet on-device guidance, user-confirmed site history and a lower-complexity experience for a specific Indian user segment. It cannot claim superiority until side-by-side testing, interoperability work, pricing research and clinical usability studies support that claim. A major incumbent can outspend a small team on regulatory and distribution.</p></div></details>
+          <details><summary>Which countries use related products, and what do they cost?</summary><div class="faq-answer"><p>Connected insulin systems are sold in selected markets, including the United States and parts of Europe and Australia; country availability differs by product and compatible insulin system. Novo Nordisk lists supported app / device markets on its official NovoPen page. Manufacturer pricing is often affected by prescription, insurance and reimbursement, and a consistent current retail price comparison is not available from public pages. A 2019 review reported historical examples such as Timesulin around £12 and Dukada Trio around €40; these must not be presented as current prices. Obtain current manufacturer and distributor quotes country by country.</p></div></details>
+          <details><summary>Is CROWN approved or in use in India?</summary><div class="faq-answer"><p>No. CROWN is an unvalidated concept shown here for discussion; no CDSCO approval or live medical-device status is claimed. India's Medical Devices Rules, 2017 establish risk-based requirements, and CDSCO has stated that devices require the relevant licensing pathway for manufacture, import, sale and distribution (with specific provisions and exceptions in the rules). Ask a regulatory professional to determine intended-use classification, test requirements, quality obligations and the correct authority before any human pilot or commercial activity.</p></div></details>
+          <details><summary>What is the Indian gap, price target and funding path?</summary><div class="faq-answer"><p>The gap to test is whether a simpler, locally supported accessory can serve a specific pen-using segment that existing ecosystems don't serve affordably or conveniently. The ₹1,999–₹2,999 amount on this page is only a willingness-to-pay hypothesis. Potential routes to investigate include local prototyping, eligible Startup India incubation / seed-funding calls and BIRAC programmes where the current call, entity and project are eligible. Make in India is an alignment opportunity, not a certification. Do not claim Ayushman Bharat reimbursement or programme support without a confirmed pathway.</p></div></details>
+          <details><summary>What are the main risks and how would we respond?</summary><div class="faq-answer"><ul><li><strong>False dose records:</strong> show uncertainty, never recommend repeat dosing, validate with ground truth.</li><li><strong>Compatibility:</strong> start with one pen model and test fit and function before adding adapters.</li><li><strong>Price-sensitive buyers:</strong> validate willingness to pay before tooling; explore partnerships and low-cost service.</li><li><strong>Brand loyalty:</strong> work with patient groups, clinicians and device manufacturers rather than claim universal fit.</li><li><strong>Regulatory delay:</strong> engage a device specialist early and budget for testing, quality systems and evidence.</li><li><strong>Privacy / cyber risk:</strong> use data minimisation, encryption, consent, retention controls and a threat model.</li></ul></div></details>
+          <details><summary>What is the patent plan and long-term future?</summary><div class="faq-answer"><p>First do prior-art and freedom-to-operate searches, then document novelty and ownership. Consult a patent professional before public disclosure and decide whether a provisional patent, design registration, software copyright or trade-secret approach is appropriate. A future roadmap could add tested adapters for more pen families, Indian-language accessibility, caregiver sharing, validated CGM integrations, clinic reporting, replaceable batteries or lower-power electronics—but only after user demand and safety have been demonstrated.</p></div></details>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer"><div class="shell"><div class="footer-main"><div><a class="brand footer-brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 28 28" fill="none"><path d="M4 19.5 6.5 8l6.1 5.8L14 5l2.2 8.8L22 8l2 11.5H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 22h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>CROWN / LAB</a><h2>More clarity around care.<br>Less to hold in memory.</h2><p>A product concept about making an everyday routine easier to see and discuss. Built to be questioned, tested and improved before it is trusted.</p></div><div class="footer-links"><a href="#product">Product</a><a href="#how">How it works</a><a href="#market">Competitors</a><a href="#india">India fit</a><a href="#build">Feasibility</a><a href="#validation">Research plan</a></div></div><div class="footer-credit">Built By SRMIST’S</div><div class="footer-bottom"><span>© CROWN LAB · Concept exploration</span><span>DESIGNED FOR CARE / BUILT FOR EVIDENCE</span><a href="#top">Back to top ↑</a></div></div></footer>
+  </main>
+</div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const mount = document.getElementById('heroScene');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let renderer, scene, camera, controls, animationId;
+  const selectable = { sensor: [], feedback: [], cartridge: [], connectivity: [] };
+  const normalMaterials = new Map();
+  let selectedPart = 'sensor';
+  const initialDetails = {
+    sensor: ['Part 01 · sensor crown','The sensing layer','A compact sensor and microcontroller package could detect pen handling and dose-related events. Which events it can reliably infer must be established with bench testing; it should never guess a dose or body site and present it as certain.',['IMU / event sensing','LED indicator','Validation required']],
+    feedback: ['Part 02 · feedback control','Quiet feedback, close at hand','A light ring and a small haptic actuator could confirm device states without demanding a phone glance. Feedback language must be tested for clarity and must not imply that an injection succeeded when the sensor is uncertain.',['Light ring','Haptic cue','No web audio']],
+    cartridge: ['Part 03 · existing pen interface','Keep the pen visible','The attachment concept should leave the insulin cartridge window visible and avoid interfering with dose selection, dose delivery, cap fitting or normal cleaning. Each pen family needs its own mechanical and functional validation.',['Visible window','Adapter collar','Pen-specific fit']],
+    connectivity: ['Part 04 · connected core','A private, local-first record','A BLE-capable controller could store a small event log locally and synchronise to the app when available. The app would identify whether data came from a sensor, an explicit patient confirmation or an external compatible device.',['BLE sync','Local memory','Consent-led sharing']]
+  };
+
+  function createModel() {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0d202b);
+    scene.fog = new THREE.Fog(0x0d202b, 8, 17);
+    camera = new THREE.PerspectiveCamera(36, mount.clientWidth / mount.clientHeight, 0.1, 100);
+    camera.position.set(4.05, 2.45, 5.95);
+    renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(mount.clientWidth, mount.clientHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.12;
+    mount.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = .055;
+    controls.enablePan = false; controls.minDistance = 3.8; controls.maxDistance = 9.5;
+    controls.minPolarAngle = .46; controls.maxPolarAngle = 2.45;
+    controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = .72;
+    controls.target.set(0, .15, 0);
+
+    scene.add(new THREE.HemisphereLight(0xd6ffff, 0x132531, 1.5));
+    const key = new THREE.DirectionalLight(0xffffff, 3.2); key.position.set(4,5,4); scene.add(key);
+    const rim = new THREE.PointLight(0x17e2cc, 28, 12); rim.position.set(-2.8,1.5,2.2); scene.add(rim);
+    const blue = new THREE.PointLight(0x267eff, 16, 11); blue.position.set(2,-.3,-2.5); scene.add(blue);
+
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(2.55, 96), new THREE.MeshBasicMaterial({color:0x112d39,transparent:true,opacity:.65}));
+    ground.rotation.x = -Math.PI/2; ground.position.y=-1.88; scene.add(ground);
+    for(let i=0;i<3;i++){
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.52+i*.29,.007,6,120), new THREE.MeshBasicMaterial({color:i===1?0x27d8c4:0x2c6470,transparent:true,opacity:i===1?.65:.34}));
+      ring.rotation.x = Math.PI/2; ring.position.y=-1.83+i*.006; scene.add(ring);
+    }
+    const floorGrid = new THREE.GridHelper(10, 24, 0x24515c, 0x173643); floorGrid.position.y=-1.9; floorGrid.material.transparent=true; floorGrid.material.opacity=.21; scene.add(floorGrid);
+
+    const root = new THREE.Group(); root.position.y=.05; root.scale.setScalar(1.16); scene.add(root);
+    const group=(name)=>{const g=new THREE.Group();g.name=name;root.add(g);selectable[name]=[];return g;};
+    const add=(g,geo,mat,pos,scale,part)=>{const objectMaterial = mat && typeof mat.clone === 'function' ? mat.clone() : mat;const m=new THREE.Mesh(geo,objectMaterial);if(pos)m.position.set(...pos);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;m.userData.part=part;g.add(m);if(part){selectable[part].push(m);normalMaterials.set(m,objectMaterial);}return m;};
+    const mat=(color,rough=.35,metal=.25,extra={})=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,...extra});
+    const turquoise=mat(0x07aeb5,.27,.48), deep=mat(0x173c83,.3,.45), white=mat(0xe8f0ed,.25,.28), silver=mat(0xc3d4d0,.24,.65), black=mat(0x07131b,.16,.5), ink=mat(0x0b2634,.3,.35), liquid=mat(0x33a9d6,.18,.25,{transparent:true,opacity:.45}), clear=mat(0x90dce3,.14,.2,{transparent:true,opacity:.25,side:THREE.DoubleSide}), tealGlow=new THREE.MeshStandardMaterial({color:0x3be2ce,emissive:0x0aa18f,emissiveIntensity:.55,roughness:.25,metalness:.35});
+
+    // Pen body: a tapered lower shell, kept separate from the connected crown.
+    const body=group('Body');
+    add(body,new THREE.CylinderGeometry(.30,.37,1.5,64,1,false),turquoise,[0,-1.05,0],[1,1,1],'cartridge');
+    add(body,new THREE.TorusGeometry(.305,.035,12,64),deep,[0,-1.79,0],null,'cartridge').rotation.x=Math.PI/2;
+    add(body,new THREE.CylinderGeometry(.29,.29,.07,64),silver,[0,-1.82,0],null,'cartridge');
+    add(body,new THREE.CylinderGeometry(.255,.255,.045,64),turquoise,[0,-1.85,0],null,'cartridge');
+    // Soft ergonomic grip grooves.
+    for(let i=0;i<6;i++){
+      const y=-1.42+i*.13;
+      const groove=add(body,new THREE.TorusGeometry(.329,.009,6,64),mat(0x15949e,.42,.25),[0,y,0],null,'cartridge');groove.rotation.x=Math.PI/2;
+    }
+
+    // Transparent cartridge window with an inner fluid column and central mechanism.
+    const cart=group('Cartridge');
+    add(cart,new THREE.CylinderGeometry(.263,.263,.94,64,1,true),clear,[0,.26,0],null,'cartridge');
+    add(cart,new THREE.CylinderGeometry(.222,.222,.68,48),liquid,[0,.20,0],null,'cartridge');
+    add(cart,new THREE.CylinderGeometry(.09,.09,.72,32),silver,[0,.22,0],null,'cartridge');
+    add(cart,new THREE.CylinderGeometry(.105,.105,.075,32),deep,[0,-.18,0],null,'cartridge');
+    add(cart,new THREE.CylinderGeometry(.255,.255,.045,64),silver,[0,-.22,0],null,'cartridge');
+    add(cart,new THREE.TorusGeometry(.267,.022,10,64),tealGlow,[0,.74,0],null,'cartridge').rotation.x=Math.PI/2;
+    // A subtle vertical window frame.
+    add(cart,new THREE.BoxGeometry(.045,.63,.018),mat(0xbfe7e4,.22,.2),[-.19,.22,.205],null,'cartridge');
+
+    // Upper dose dial / device interface.
+    const dial=group('Dose control');
+    add(dial,new THREE.CylinderGeometry(.326,.31,.76,64),deep,[0,1.08,0],null,'feedback');
+    add(dial,new THREE.TorusGeometry(.324,.018,10,64),silver,[0,.70,0],null,'feedback').rotation.x=Math.PI/2;
+    add(dial,new THREE.TorusGeometry(.324,.014,10,64),tealGlow,[0,1.44,0],null,'feedback').rotation.x=Math.PI/2;
+    add(dial,new THREE.CylinderGeometry(.295,.295,.06,64),mat(0x1f478f,.32,.5),[0,1.47,0],null,'feedback');
+    // A small side button at the front of the dial.
+    const button=add(dial,new THREE.SphereGeometry(.11,32,24),tealGlow,[.13,1.1,.29],[.62,1.13,.42],'feedback');
+    // Printed label plaque.
+    add(dial,new THREE.BoxGeometry(.25,.42,.014),mat(0xdcebe8,.62,.08),[-.055,1.08,.315],null,'feedback');
+    // text-like micro marks on plaque are geometric, not rendered product branding.
+    for(let i=0;i<4;i++) add(dial,new THREE.BoxGeometry(.13-i*.018,.012,.008),mat(0x3f6c79,.65,.05),[-.055,1.22-i*.07,.326],null,'feedback');
+
+    // The white sensor crown on the top of the pen.
+    const crown=group('Sensor crown');
+    crown.position.y=-.11; // Lower the crown slightly for a more integrated, pen-like silhouette.
+    add(crown,new THREE.CylinderGeometry(.365,.38,.44,64),white,[0,1.79,0],null,'sensor');
+    add(crown,new THREE.SphereGeometry(.365,64,32,0,Math.PI*2,0,Math.PI/2),white,[0,2.01,0],null,'sensor');
+    add(crown,new THREE.TorusGeometry(.374,.026,12,72),tealGlow,[0,1.59,0],null,'sensor').rotation.x=Math.PI/2;
+    add(crown,new THREE.CylinderGeometry(.075,.075,.02,40),silver,[0,2.365,0],null,'sensor');
+    add(crown,new THREE.CylinderGeometry(.052,.052,.024,40),black,[0,2.382,0],null,'sensor');
+    add(crown,new THREE.TorusGeometry(.064,.009,8,40),tealGlow,[0,2.397,0],null,'sensor');
+    // Three small optical ports and a microphone-like perforation pattern, all visual only.
+    for(let i=0;i<5;i++){
+      const angle=(i/5)*Math.PI*2;
+      const dot=add(crown,new THREE.SphereGeometry(.015,12,8),black,[Math.cos(angle)*.12,2.29,Math.sin(angle)*.12],[1,.45,1],'sensor');
+    }
+    const topBadge=add(crown,new THREE.TorusGeometry(.09,.006,6,40),silver,[0,2.355,0],null,'sensor');topBadge.rotation.x=Math.PI/2;
+    // Small speaker-like grille on the crown side (visual concept detail only).
+    add(crown,new THREE.BoxGeometry(.16,.075,.026),black,[.17,1.83,.337],[1,1,1],'sensor');
+    for(let i=0;i<5;i++) add(crown,new THREE.SphereGeometry(.009,10,8),silver,[.115+i*.027,1.83,.354],null,'sensor');
+
+    // BLE/core is nested visually beneath the shell; a blue inset indicates electronics.
+    const core=group('Connected core');
+    add(core,new THREE.BoxGeometry(.19,.15,.04),mat(0x166d9d,.3,.5),[.16,1.75,.255],null,'connectivity');
+    add(core,new THREE.BoxGeometry(.11,.025,.012),tealGlow,[.16,1.75,.279],null,'connectivity');
+    add(core,new THREE.SphereGeometry(.028,18,12),mat(0x53c7fb,.2,.2,{emissive:0x0875b5,emissiveIntensity:.5}),[.16,1.80,.28],null,'connectivity');
+    // Antenna arcs are purely illustrative visual cues.
+    for(let i=0;i<2;i++){
+      const arc=new THREE.Mesh(new THREE.TorusGeometry(.12+i*.055,.005,6,30,Math.PI*.72),new THREE.MeshBasicMaterial({color:0x27cdbb,transparent:true,opacity:.8-i*.2}));
+      arc.position.set(-.08,1.83,.29);arc.rotation.set(0,0,Math.PI*.12);core.add(arc);arc.userData.part='connectivity';selectable.connectivity.push(arc);normalMaterials.set(arc,arc.material);
+    }
+
+    // Subtle dotted halo behind the device.
+    const points=[];for(let i=0;i<84;i++){const a=Math.random()*Math.PI*2;const r=1.6+Math.random()*.7;points.push(Math.cos(a)*r,(Math.random()-.5)*3.4,Math.sin(a)*r)}
+    const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.Float32BufferAttribute(points,3));
+    const pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x49c9bd,size:.018,transparent:true,opacity:.5}));scene.add(pts);
+
+    const raycaster=new THREE.Raycaster();const pointer=new THREE.Vector2();
+    renderer.domElement.addEventListener('pointerdown',(e)=>{renderer.domElement._startX=e.clientX;renderer.domElement._startY=e.clientY;});
+    renderer.domElement.addEventListener('pointerup',(e)=>{
+      if(Math.abs(e.clientX-(renderer.domElement._startX||0))>5||Math.abs(e.clientY-(renderer.domElement._startY||0))>5)return;
+      const rect=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-rect.left)/rect.width)*2-1;pointer.y=-((e.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(pointer,camera);
+      const hits=raycaster.intersectObjects(root.children,true);if(hits.length){const part=hits.find(h=>h.object.userData.part)?.object.userData.part;if(part){setSelectedPart(part);}}
+    });
+
+    function onResize(){if(!renderer||!camera)return;const w=mount.clientWidth,h=mount.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);}
+    window.addEventListener('resize',onResize);
+    const clock=new THREE.Clock();
+    function animate(){animationId=requestAnimationFrame(animate);const t=clock.getElapsedTime();root.rotation.y+=reduceMotion?0:0.0006;root.position.y=.05+(reduceMotion?0:Math.sin(t*.65)*.035);controls.update();renderer.render(scene,camera);}
+    animate();
+  }
+
+  function setSelectedPart(part){
+    selectedPart=part;
+    document.querySelectorAll('.scene-label').forEach(b=>b.classList.toggle('active',b.dataset.part===part));
+    document.querySelectorAll('.step').forEach(b=>{});
+    const d=initialDetails[part] || initialDetails.sensor;
+    const box=document.getElementById('partDetails');
+    box.innerHTML=`<div class="pill">${d[0]}</div><h3 style="margin-top:20px">${d[1]}</h3><p>${d[2]}</p><div class="tag-row">${d[3].map(s=>`<span class="soft-tag">${s}</span>`).join('')}</div>`;
+    // Highlight associated objects without making them blink or distract from the model.
+    Object.keys(selectable).forEach(key=>selectable[key].forEach(mesh=>{
+      const original=normalMaterials.get(mesh);if(!original)return;
+      if(key===part){if(original.emissive){original.emissive.set(0x087c70);original.emissiveIntensity=.22;}else if(original.color){original.color.offsetHSL(0,.08,.04);}}
+      else if(original.emissive){original.emissive.set(0x000000);original.emissiveIntensity=0;}
+    }));
+  }
+  document.querySelectorAll('.scene-label').forEach(b=>b.addEventListener('click',()=>setSelectedPart(b.dataset.part)));
+  createModel();
+
+</script>
+<script>
+  const stepCopy=[
+    ['A reminder that arrives at the right moment.','A discreet light or haptic cue signals a planned event. The user can review the prescribed plan before taking any action.','On-device','No sound','Optional'],
+    ['A guide that does not prescribe.','The device can guide the agreed routine and ask for a confirmation. It must not calculate a dose or replace instructions from the care team.','User-led','No dosing','Clear cue'],
+    ['A site history the patient can trust.','The app shows recent sites that the user confirmed and prompts rotation according to the personal plan. Automatic body-location recognition stays experimental until proven.','Site log','User-confirmed','Test first'],
+    ['A record that travels when it can.','Events are stored locally, then synchronised securely when a phone is available. Source and confidence travel with the entry so a sensor estimate is not mistaken for a verified injection.','BLE sync','Local log','Consent-led'],
+    ['A better conversation at review.','The patient can share relevant records with their clinician. The dashboard highlights patterns to discuss; a qualified clinician keeps control of medical decisions.','Shared view','Human review','No auto-dose']
+  ];
+  document.querySelectorAll('.step').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',s===btn));
+    const d=stepCopy[Number(btn.dataset.step)];const n=Number(btn.dataset.step)+1;
+    document.querySelector('#flowPanel .eyebrow').textContent=`The routine / step 0${n}`;
+    document.getElementById('flowTitle').textContent=d[0];document.getElementById('flowText').textContent=d[1];
+    document.getElementById('flowMetric1').textContent=d[2];document.getElementById('flowMetric2').textContent=d[3];document.getElementById('flowMetric3').textContent=d[4];
+  }));
+  const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');revealObserver.unobserve(entry.target)}}),{threshold:.12,rootMargin:'0px 0px -35px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+  const menuToggle=document.getElementById('menuToggle'),navLinks=document.getElementById('navLinks');
+  const themeToggle=document.getElementById('themeToggle');
+  const themeMeta=document.querySelector('meta[name="theme-color"]');
+  function applyTheme(theme, persist=true){
+    document.documentElement.dataset.theme=theme;
+    const dark=theme==='dark';
+    const label=dark?'Switch to light mode':'Switch to dark mode';
+    themeToggle.setAttribute('aria-label',label);
+    themeToggle.setAttribute('title',label);
+    if(themeMeta) themeMeta.setAttribute('content',dark?'#1c1510':'#f7f5f4');
+    if(persist){try{localStorage.setItem('crown-theme',theme);}catch(_){}}
+  }
+  applyTheme(document.documentElement.dataset.theme==='dark'?'dark':'light',false);
+  themeToggle.addEventListener('click',()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+  menuToggle.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuToggle.setAttribute('aria-expanded',String(open));});
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menuToggle.setAttribute('aria-expanded','false')}));
+  // All controls are silent: no audio context, autoplay or sound assets are used by this site.
+</script>
+</body>
+</html>
