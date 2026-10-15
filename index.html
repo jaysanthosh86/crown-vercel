@@ -589,193 +589,115 @@
     <footer class="footer"><div class="shell"><div class="footer-main"><div><a class="brand footer-brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 28 28" fill="none"><path d="M4 19.5 6.5 8l6.1 5.8L14 5l2.2 8.8L22 8l2 11.5H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 22h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>CROWN / LAB</a><h2>More clarity around care.<br>Less to hold in memory.</h2><p>A product concept about making an everyday routine easier to see and discuss. Built to be questioned, tested and improved before it is trusted.</p></div><div class="footer-links"><a href="#product">Product</a><a href="#how">How it works</a><a href="#india">India fit</a><a href="#build">Feasibility</a><a href="#validation">Research plan</a></div></div><p class="disclaimer">Important: CROWN is a concept only. Nothing on this website is medical advice, a dosing guide, an approval claim or proof of clinical effectiveness. Never change an insulin dose or repeat an injection based on an unvalidated device or mock interface. All dashboard values and visualisations are illustrative. Market availability and regulatory requirements should be verified with official sources before use in a pitch, research study or business plan.</p><div class="footer-bottom"><span>© CROWN LAB · Concept exploration</span><span>DESIGNED FOR CARE / BUILT FOR EVIDENCE</span><a href="#top">Back to top ↑</a></div></div></footer>
   </main>
 </div>
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module">
-  import * as THREE from 'three';
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
   const mount = document.getElementById('heroScene');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let renderer, scene, camera, controls, animationId;
-  const selectable = { sensor: [], feedback: [], cartridge: [], connectivity: [] };
-  const normalMaterials = new Map();
-  let selectedPart = 'sensor';
-  const initialDetails = {
-    sensor: ['Part 01 · sensor crown','The sensing layer','A compact sensor and microcontroller package could detect pen handling and dose-related events. Which events it can reliably infer must be established with bench testing; it should never guess a dose or body site and present it as certain.',['IMU / event sensing','LED indicator','Validation required']],
-    feedback: ['Part 02 · feedback control','Quiet feedback, close at hand','A light ring and a small haptic actuator could confirm device states without demanding a phone glance. Feedback language must be tested for clarity and must not imply that an injection succeeded when the sensor is uncertain.',['Light ring','Haptic cue','No web audio']],
-    cartridge: ['Part 03 · existing pen interface','Keep the pen visible','The attachment concept should leave the insulin cartridge window visible and avoid interfering with dose selection, dose delivery, cap fitting or normal cleaning. Each pen family needs its own mechanical and functional validation.',['Visible window','Adapter collar','Pen-specific fit']],
-    connectivity: ['Part 04 · connected core','A private, local-first record','A BLE-capable controller could store a small event log locally and synchronise to the app when available. The app would identify whether data came from a sensor, an explicit patient confirmation or an external compatible device.',['BLE sync','Local memory','Consent-led sharing']]
+  if (!mount || !window.THREE) return;
+  const THREE = window.THREE;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.35));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  mount.appendChild(renderer.domElement);
+  renderer.domElement.setAttribute('aria-label','Interactive Smart Crown Mount and insulin pen model');
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(35,1,1,1000);
+  scene.add(new THREE.HemisphereLight(0xffffff,0x6677aa,0.9));
+  const key = new THREE.DirectionalLight(0xffffff,1.05); key.position.set(60,120,150); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff,.32); fill.position.set(-100,-20,-80); scene.add(fill);
+  const root = new THREE.Group(); scene.add(root);
+  const M=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.4,metalness:.1},o));
+  const cyl=(r1,r2,h,y,m,seg=40)=>{const g=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,seg),m);g.position.y=y;return g};
+
+  const pen=new THREE.Group(); root.add(pen);
+  const navy=M(0x14264f,{roughness:.35});
+  pen.add(cyl(7.4,7.4,80,20,navy));
+  pen.add(cyl(6.6,6.6,50,-45,M(0x1d3568,{roughness:.3})));
+  pen.add(cyl(7.6,7.6,3,-19,M(0xb8c2d6,{metalness:.8,roughness:.25})));
+  const win=new THREE.Mesh(new THREE.BoxGeometry(5,24,1),M(0xcfe6f5,{transparent:true,opacity:.55})); win.position.set(0,-45,6.2); pen.add(win);
+  pen.add(cyl(4,2.5,10,-74,M(0xdfe5ee))); pen.add(cyl(.5,.5,12,-85,M(0xaaaaaa,{metalness:.9})));
+  const pbtn=cyl(3.5,3.5,3.5,61.8,M(0xe9edf3)); pen.add(pbtn);
+
+  const mount3d=new THREE.Group(); root.add(mount3d);
+  const prof=[[0,24],[7.6,24],[7.6,0],[8.6,0],[8.6,29],[7.6,32.6],[5,34.2],[0,34.2]].map(p=>new THREE.Vector2(p[0],p[1]));
+  const shellM=new THREE.MeshPhysicalMaterial({color:0xfbfcff,roughness:.28,metalness:.05,clearcoat:1,clearcoatRoughness:.15,side:THREE.DoubleSide,transparent:true});
+  const shell=new THREE.Mesh(new THREE.LatheGeometry(prof,48),shellM); mount3d.add(shell);
+  const mbtn=cyl(4.2,4.2,2,35,M(0xf4f6fa,{roughness:.3})); mount3d.add(mbtn);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(4.4,.35,10,28),M(0xc9d1de)); ring.rotation.x=Math.PI/2; ring.position.y=34.1; mount3d.add(ring);
+  // Crown logo
+  const cv=document.createElement('canvas'); cv.width=cv.height=128; const x=cv.getContext('2d');
+  const gr=x.createLinearGradient(0,20,0,110); gr.addColorStop(0,'#ffd23f'); gr.addColorStop(1,'#ee6a1a');
+  x.strokeStyle=gr; x.fillStyle=gr; x.lineWidth=13; x.lineJoin='round'; x.lineCap='round';
+  x.beginPath(); x.moveTo(20,48); x.lineTo(44,103); x.lineTo(64,60); x.lineTo(84,103); x.lineTo(108,48); x.stroke();
+  [[20,35],[64,25],[108,35]].forEach(p=>{x.beginPath();x.arc(p[0],p[1],7,0,Math.PI*2);x.fill()});
+  const logo=new THREE.Mesh(new THREE.CylinderGeometry(8.7,8.7,13,24,1,true,-.5,1),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv),transparent:true})); logo.position.y=15; mount3d.add(logo);
+
+  const internals=new THREE.Group(); mount3d.add(internals);
+  const pcb=cyl(5.6,5.6,.8,19.2,M(0x1f8a4c)); internals.add(pcb);
+  const chip=new THREE.Mesh(new THREE.BoxGeometry(3,.8,3),M(0x222222)); chip.position.set(1.5,20,1); internals.add(chip);
+  const spk=cyl(2,2,1,21.2,M(0x888888,{metalness:.6})); spk.position.x=-2.5; internals.add(spk);
+  const bat=new THREE.Mesh(new THREE.BoxGeometry(11,2.4,3.5),M(0x3b82f6)); bat.position.set(0,22.8,-4); internals.add(bat);
+  internals.position.y=6; internals.visible=false;
+  const seam=new THREE.Mesh(new THREE.TorusGeometry(8.63,.14,8,48),M(0x1a1d24,{roughness:.6})); seam.rotation.x=Math.PI/2; seam.position.y=22; mount3d.add(seam);
+  const grip=new THREE.Mesh(new THREE.TorusGeometry(8.62,.5,8,48),M(0xd5dbe6,{roughness:.5})); grip.rotation.x=Math.PI/2; grip.position.y=1.2; mount3d.add(grip); const grip2=grip.clone(); grip2.position.y=3.4; mount3d.add(grip2);
+  for(let i=0;i<5;i++) for(let j=0;j<2;j++){const h=cyl(.35,.35,1.2,0,M(0x1a1d24,{roughness:.6}),8);h.rotation.z=Math.PI/2;h.position.set(-8.6,8+i*2,(j-.5)*2.2);mount3d.add(h)}
+  const port=new THREE.Mesh(new THREE.BoxGeometry(4.2,1.6,1.2),M(0x1a1d24)); port.position.set(0,7,-8.6); mount3d.add(port);
+  [-1,1].forEach(side=>{const c=new THREE.Mesh(new THREE.BoxGeometry(1.2,7,3),M(0xb7c0d0,{metalness:.5,roughness:.35}));c.position.set(side*8.7,12,0);mount3d.add(c)});
+  const led=new THREE.Mesh(new THREE.SphereGeometry(.85,12,12),new THREE.MeshStandardMaterial({color:0x22ff88,emissive:0x22ff88,emissiveIntensity:1})); led.position.set(0,27,8.5); mount3d.add(led);
+  const glow=new THREE.PointLight(0x22ff88,0,40); glow.position.set(0,27,12); mount3d.add(glow);
+
+  // Lightweight interaction: drag to rotate, wheel/pinch to zoom.
+  let slideT=0, slide=0, inside=false, pressT=0, press=0, rx=.15, ry=-.6, dist=300, auto=!reduceMotion;
+  const pointers=new Map(); let previousPinch=0;
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  mount.addEventListener('pointerdown',e=>{pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});mount.setPointerCapture(e.pointerId);auto=false});
+  mount.addEventListener('pointerup',e=>{pointers.delete(e.pointerId);previousPinch=0});
+  mount.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);previousPinch=0});
+  mount.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId)) return;
+    const old=pointers.get(e.pointerId); pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===1){ry+=(e.clientX-old.x)*.01;rx=clamp(rx+(e.clientY-old.y)*.01,-1.3,1.3)}
+    else if(pointers.size===2){const [a,b]=[...pointers.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);if(previousPinch)dist=clamp(dist*previousPinch/d,120,600);previousPinch=d}
+  });
+  mount.addEventListener('wheel',e=>{dist=clamp(dist+e.deltaY*.3,120,600)},{passive:true});
+
+  // Connect the existing part labels to meaningful areas of the new model.
+  const initialDetails={
+    sensor:['Part 01 · smart crown','The detachable smart mount','The white crown is the removable smart attachment. The concept model shows the housing, indicator LED and electronics bay; these are visual prototype elements, not validated medical functions.',['Detachable mount','Status LED','Prototype concept']],
+    feedback:['Part 02 · dose interface','The pen control area','The mount sits around the pen’s dose-button end. The interactive press animation demonstrates the mechanism visually and does not determine or recommend an insulin dose.',['Dose-button area','Press animation','No auto-dosing']],
+    cartridge:['Part 03 · insulin pen','The existing pen remains visible','The navy pen body and transparent window remain visible beneath the crown mount so the attachment can be understood without hiding the underlying pen.',['Pen body','Viewing window','Pen-specific fit']],
+    connectivity:['Part 04 · electronics','The connected core inside','The internal view exposes a simplified PCB, chip, speaker and battery to communicate where electronics could sit inside the crown.',['PCB','Battery','Electronics bay']]
   };
-
-  function createModel() {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0d202b);
-    scene.fog = new THREE.Fog(0x0d202b, 8, 17);
-    camera = new THREE.PerspectiveCamera(36, mount.clientWidth / mount.clientHeight, 0.1, 100);
-    camera.position.set(4.25, 2.8, 7.35);
-    renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-    renderer.setSize(mount.clientWidth, mount.clientHeight);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
-    mount.appendChild(renderer.domElement);
-
-    controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; controls.dampingFactor = .055;
-    controls.enablePan = false; controls.minDistance = 4.8; controls.maxDistance = 10.5;
-    controls.minPolarAngle = .46; controls.maxPolarAngle = 2.45;
-    controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = .72;
-    controls.target.set(0, .48, 0);
-
-    scene.add(new THREE.HemisphereLight(0xd6ffff, 0x132531, 1.5));
-    const key = new THREE.DirectionalLight(0xffffff, 3.2); key.position.set(4,5,4); scene.add(key);
-    const rim = new THREE.PointLight(0x17e2cc, 28, 12); rim.position.set(-2.8,1.5,2.2); scene.add(rim);
-    const blue = new THREE.PointLight(0x267eff, 16, 11); blue.position.set(2,-.3,-2.5); scene.add(blue);
-
-    const ground = new THREE.Mesh(new THREE.CircleGeometry(2.55, 96), new THREE.MeshBasicMaterial({color:0x102239,transparent:true,opacity:.65}));
-    ground.rotation.x = -Math.PI/2; ground.position.y=-1.88; scene.add(ground);
-    for(let i=0;i<3;i++){
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(1.52+i*.29,.007,6,120), new THREE.MeshBasicMaterial({color:i===1?0x398fff:0x294e76,transparent:true,opacity:i===1?.65:.34}));
-      ring.rotation.x = Math.PI/2; ring.position.y=-1.83+i*.006; scene.add(ring);
-    }
-    const floorGrid = new THREE.GridHelper(10, 24, 0x24515c, 0x173643); floorGrid.position.y=-1.9; floorGrid.material.transparent=true; floorGrid.material.opacity=.21; scene.add(floorGrid);
-
-    const root = new THREE.Group(); root.position.y=-.02; root.scale.setScalar(1.02); scene.add(root);
-    const group=(name)=>{const g=new THREE.Group();g.name=name;root.add(g);selectable[name]=[];return g;};
-    const add=(g,geo,mat,pos,scale,part)=>{const objectMaterial = mat && typeof mat.clone === 'function' ? mat.clone() : mat;const m=new THREE.Mesh(geo,objectMaterial);if(pos)m.position.set(...pos);if(scale)m.scale.set(...scale);m.castShadow=true;m.receiveShadow=true;m.userData.part=part;g.add(m);if(part){selectable[part].push(m);normalMaterials.set(m,objectMaterial);}return m;};
-    const mat=(color,rough=.35,metal=.25,extra={})=>new THREE.MeshStandardMaterial({color,roughness:rough,metalness:metal,...extra});
-    const turquoise=mat(0x17458d,.28,.42), deep=mat(0x102e63,.3,.45), white=mat(0x111923,.23,.42), silver=mat(0xaab6c4,.24,.65), black=mat(0x05090f,.16,.5), ink=mat(0x0b2634,.3,.35), liquid=mat(0x398ce5,.18,.25,{transparent:true,opacity:.45}), clear=mat(0x90c8f0,.14,.2,{transparent:true,opacity:.25,side:THREE.DoubleSide}), tealGlow=new THREE.MeshStandardMaterial({color:0x35a4ff,emissive:0x0868d0,emissiveIntensity:.75,roughness:.25,metalness:.35});
-
-    // Pen body: a tapered lower shell, kept separate from the connected crown.
-    const body=group('Body');
-    add(body,new THREE.CylinderGeometry(.30,.37,1.5,64,1,false),turquoise,[0,-1.05,0],[1,1,1],'cartridge');
-    add(body,new THREE.TorusGeometry(.305,.035,12,64),deep,[0,-1.79,0],null,'cartridge').rotation.x=Math.PI/2;
-    add(body,new THREE.CylinderGeometry(.29,.29,.07,64),silver,[0,-1.82,0],null,'cartridge');
-    add(body,new THREE.CylinderGeometry(.255,.255,.045,64),turquoise,[0,-1.85,0],null,'cartridge');
-    // Soft ergonomic grip grooves.
-    for(let i=0;i<6;i++){
-      const y=-1.42+i*.13;
-      const groove=add(body,new THREE.TorusGeometry(.329,.009,6,64),mat(0x17396e,.42,.25),[0,y,0],null,'cartridge');groove.rotation.x=Math.PI/2;
-    }
-
-    // Transparent cartridge window with an inner fluid column and central mechanism.
-    const cart=group('Cartridge');
-    add(cart,new THREE.CylinderGeometry(.263,.263,.94,64,1,true),clear,[0,.26,0],null,'cartridge');
-    add(cart,new THREE.CylinderGeometry(.222,.222,.68,48),liquid,[0,.20,0],null,'cartridge');
-    add(cart,new THREE.CylinderGeometry(.09,.09,.72,32),silver,[0,.22,0],null,'cartridge');
-    add(cart,new THREE.CylinderGeometry(.105,.105,.075,32),deep,[0,-.18,0],null,'cartridge');
-    add(cart,new THREE.CylinderGeometry(.255,.255,.045,64),silver,[0,-.22,0],null,'cartridge');
-    add(cart,new THREE.TorusGeometry(.267,.022,10,64),tealGlow,[0,.74,0],null,'cartridge').rotation.x=Math.PI/2;
-    // A subtle vertical window frame.
-    add(cart,new THREE.BoxGeometry(.045,.63,.018),mat(0xb9d8f4,.22,.2),[-.19,.22,.205],null,'cartridge');
-
-    // Upper dose dial / device interface.
-    const dial=group('Dose control');
-    add(dial,new THREE.CylinderGeometry(.326,.31,.76,64),deep,[0,1.08,0],null,'feedback');
-    add(dial,new THREE.TorusGeometry(.324,.018,10,64),silver,[0,.70,0],null,'feedback').rotation.x=Math.PI/2;
-    add(dial,new THREE.TorusGeometry(.324,.014,10,64),tealGlow,[0,1.44,0],null,'feedback').rotation.x=Math.PI/2;
-    add(dial,new THREE.CylinderGeometry(.295,.295,.06,64),mat(0x101c30,.32,.5),[0,1.47,0],null,'feedback');
-    // A small side button at the front of the dial.
-    const button=add(dial,new THREE.SphereGeometry(.11,32,24),tealGlow,[.13,1.1,.29],[.62,1.13,.42],'feedback');
-    // Printed label plaque.
-    add(dial,new THREE.BoxGeometry(.25,.42,.014),mat(0xdcebe8,.62,.08),[-.055,1.08,.315],null,'feedback');
-    // text-like micro marks on plaque are geometric, not rendered product branding.
-    for(let i=0;i<4;i++) add(dial,new THREE.BoxGeometry(.13-i*.018,.012,.008),mat(0x3f6388,.65,.05),[-.055,1.22-i*.07,.326],null,'feedback');
-
-    // The white sensor crown on the top of the pen.
-    const crown=group('Sensor crown');
-    crown.position.y=-.11; // Lower the crown slightly for a more integrated, pen-like silhouette.
-    add(crown,new THREE.CylinderGeometry(.365,.38,.44,64),white,[0,1.79,0],null,'sensor');
-    add(crown,new THREE.SphereGeometry(.365,64,32,0,Math.PI*2,0,Math.PI/2),white,[0,2.01,0],null,'sensor');
-    // Floating outer cap, separated by a visible gap to communicate the detachable design.
-    const detachedCap=group('Detachable cap');
-    add(detachedCap,new THREE.CylinderGeometry(.39,.37,.34,64),black,[0,2.62,0],null,'sensor');
-    add(detachedCap,new THREE.SphereGeometry(.37,64,32,0,Math.PI*2,0,Math.PI/2),black,[0,2.79,0],null,'sensor');
-    add(detachedCap,new THREE.TorusGeometry(.385,.018,10,64),silver,[0,2.48,0],null,'sensor').rotation.x=Math.PI/2;
-    add(detachedCap,new THREE.BoxGeometry(.16,.065,.025),black,[.17,2.62,.36],null,'sensor');
-    for(let i=0;i<5;i++) add(detachedCap,new THREE.BoxGeometry(.012,.008,.008),silver,[.115+i*.027,2.62,.376],null,'sensor');
-    add(crown,new THREE.TorusGeometry(.374,.026,12,72),tealGlow,[0,1.59,0],null,'sensor').rotation.x=Math.PI/2;
-    add(crown,new THREE.CylinderGeometry(.075,.075,.02,40),silver,[0,2.365,0],null,'sensor');
-    add(crown,new THREE.CylinderGeometry(.052,.052,.024,40),black,[0,2.382,0],null,'sensor');
-    add(crown,new THREE.TorusGeometry(.064,.009,8,40),tealGlow,[0,2.397,0],null,'sensor');
-    // Three small optical ports and a microphone-like perforation pattern, all visual only.
-    for(let i=0;i<5;i++){
-      const angle=(i/5)*Math.PI*2;
-      const dot=add(crown,new THREE.SphereGeometry(.015,12,8),black,[Math.cos(angle)*.12,2.29,Math.sin(angle)*.12],[1,.45,1],'sensor');
-    }
-    const topBadge=add(crown,new THREE.TorusGeometry(.09,.006,6,40),silver,[0,2.355,0],null,'sensor');topBadge.rotation.x=Math.PI/2;
-    // Small speaker-like grille on the crown side (visual concept detail only).
-    add(crown,new THREE.BoxGeometry(.16,.075,.026),black,[.17,1.83,.337],[1,1,1],'sensor');
-    for(let i=0;i<5;i++) add(crown,new THREE.SphereGeometry(.009,10,8),silver,[.115+i*.027,1.83,.354],null,'sensor');
-
-    // BLE/core is nested visually beneath the shell; a blue inset indicates electronics.
-    const core=group('Connected core');
-    add(core,new THREE.BoxGeometry(.19,.15,.04),mat(0x166d9d,.3,.5),[.16,1.75,.255],null,'connectivity');
-    add(core,new THREE.BoxGeometry(.11,.025,.012),tealGlow,[.16,1.75,.279],null,'connectivity');
-    add(core,new THREE.SphereGeometry(.028,18,12),mat(0x53c7fb,.2,.2,{emissive:0x0875b5,emissiveIntensity:.5}),[.16,1.80,.28],null,'connectivity');
-    // Antenna arcs are purely illustrative visual cues.
-    for(let i=0;i<2;i++){
-      const arc=new THREE.Mesh(new THREE.TorusGeometry(.12+i*.055,.005,6,30,Math.PI*.72),new THREE.MeshBasicMaterial({color:0x27cdbb,transparent:true,opacity:.8-i*.2}));
-      arc.position.set(-.08,1.83,.29);arc.rotation.set(0,0,Math.PI*.12);core.add(arc);arc.userData.part='connectivity';selectable.connectivity.push(arc);normalMaterials.set(arc,arc.material);
-    }
-
-    // Subtle dotted halo behind the device.
-    const points=[];for(let i=0;i<84;i++){const a=Math.random()*Math.PI*2;const r=1.6+Math.random()*.7;points.push(Math.cos(a)*r,(Math.random()-.5)*3.4,Math.sin(a)*r)}
-    const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.Float32BufferAttribute(points,3));
-    const pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x49c9bd,size:.018,transparent:true,opacity:.5}));scene.add(pts);
-
-    const raycaster=new THREE.Raycaster();const pointer=new THREE.Vector2();
-    renderer.domElement.addEventListener('pointerdown',(e)=>{renderer.domElement._startX=e.clientX;renderer.domElement._startY=e.clientY;});
-    renderer.domElement.addEventListener('pointerup',(e)=>{
-      if(Math.abs(e.clientX-(renderer.domElement._startX||0))>5||Math.abs(e.clientY-(renderer.domElement._startY||0))>5)return;
-      const rect=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-rect.left)/rect.width)*2-1;pointer.y=-((e.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(pointer,camera);
-      const hits=raycaster.intersectObjects(root.children,true);if(hits.length){const part=hits.find(h=>h.object.userData.part)?.object.userData.part;if(part){setSelectedPart(part);}}
-    });
-
-    function onResize(){if(!renderer||!camera)return;const w=mount.clientWidth,h=mount.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);}
-    window.addEventListener('resize',onResize);
-    const clock=new THREE.Clock();
-    function animate(){
-      if (document.hidden) { animationId = null; return; }
-      animationId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
-      root.rotation.y += reduceMotion ? 0 : 0.0006;
-      root.position.y = .05 + (reduceMotion ? 0 : Math.sin(t * .65) * .035);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && !animationId) { clock.start(); animate(); }
-      else if (document.hidden && animationId) { cancelAnimationFrame(animationId); animationId = null; }
-    });
-    animate();
-  }
-
+  const selectable={sensor:[shell,ring,logo,led],feedback:[mbtn,pbtn],cartridge:[pen,win],connectivity:[pcb,chip,spk,bat]};
   function setSelectedPart(part){
-    selectedPart=part;
     document.querySelectorAll('.scene-label').forEach(b=>b.classList.toggle('active',b.dataset.part===part));
-    document.querySelectorAll('.step').forEach(b=>{});
-    const d=initialDetails[part] || initialDetails.sensor;
-    const box=document.getElementById('partDetails');
-    box.innerHTML=`<div class="pill">${d[0]}</div><h3 style="margin-top:20px">${d[1]}</h3><p>${d[2]}</p><div class="tag-row">${d[3].map(s=>`<span class="soft-tag">${s}</span>`).join('')}</div>`;
-    // Highlight associated objects without making them blink or distract from the model.
-    Object.keys(selectable).forEach(key=>selectable[key].forEach(mesh=>{
-      const original=normalMaterials.get(mesh);if(!original)return;
-      if(key===part){if(original.emissive){original.emissive.set(0x087c70);original.emissiveIntensity=.22;}else if(original.color){original.color.offsetHSL(0,.08,.04);}}
-      else if(original.emissive){original.emissive.set(0x000000);original.emissiveIntensity=0;}
-    }));
+    const d=initialDetails[part]||initialDetails.sensor,box=document.getElementById('partDetails');
+    if(box) box.innerHTML=`<div class="pill">${d[0]}</div><h3 style="margin-top:20px">${d[1]}</h3><p>${d[2]}</p><div class="tag-row">${d[3].map(s=>`<span class="soft-tag">${s}</span>`).join('')}</div>`;
+    Object.entries(selectable).forEach(([key,items])=>items.forEach(m=>{if(m.material&&m.material.emissive){m.material.emissive.setHex(key===part?0x087c70:0);m.material.emissiveIntensity=key===part?.25:0}}));
   }
   document.querySelectorAll('.scene-label').forEach(b=>b.addEventListener('click',()=>setSelectedPart(b.dataset.part)));
-  createModel();
+  setSelectedPart('sensor');
 
+  // The three existing buttons are represented by the on-page part labels; no extra controls are added.
+  function resize(){const w=Math.max(1,mount.clientWidth),h=Math.max(1,mount.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  addEventListener('resize',resize,{passive:true}); resize();
+  let raf=0,last=0;
+  function render(now){
+    raf=requestAnimationFrame(render);
+    if(document.hidden)return;
+    // Cap animation work on slower devices while keeping input responsive.
+    if(now-last<16) return; last=now;
+    slide+=(slideT-slide)*.08; press+=(pressT-press)*.35;
+    mount3d.position.y=40+slide*62-press*1.5; mbtn.position.y=35-press*1.5; pbtn.position.y=61.8-press*1.2;
+    const k=.5+.5*Math.sin(now/350), lc=press>.3?0xffb020:0x22ff88;
+    led.material.color.setHex(lc); led.material.emissive.setHex(lc); led.material.emissiveIntensity=.4+k*1.4+press*2; glow.color.setHex(lc); glow.intensity=k*35+press*70;
+    if(auto)ry+=.0035; root.rotation.set(rx,ry,0); camera.position.set(0,0,dist); camera.lookAt(0,0,0); root.position.y=-8; renderer.render(scene,camera);
+  }
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=0}else if(!raf)requestAnimationFrame(render)});
+  requestAnimationFrame(render);
+})();
 </script>
 <script>
   const stepCopy=[
